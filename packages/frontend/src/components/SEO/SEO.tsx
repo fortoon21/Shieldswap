@@ -1,7 +1,7 @@
 import NextHead from "next/head";
 import React from "react";
 
-import { SERVICE_NAME } from "../../lib/constants";
+import { SERVICE_NAME } from "../../lib/app/constants";
 
 export const SEO: React.FC = () => {
   return (

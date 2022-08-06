@@ -1,7 +1,7 @@
 import { Box, ButtonGroup, IconButton, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
-import { SERVICE_NAME } from "../../lib/constants";
+import { SERVICE_NAME } from "../../lib/app/constants";
 import { icons } from "./data";
 
 export const Footer: React.FC = () => {

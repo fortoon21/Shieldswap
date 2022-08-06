@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { Swap as Component } from "./SearchBox";
+import { Swap as Component } from "./Swap";
 
 export default {
   title: "Components/Swap",

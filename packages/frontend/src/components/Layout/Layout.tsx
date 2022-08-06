@@ -1,4 +1,4 @@
-import { Box, Center, Container, Flex } from "@chakra-ui/react";
+import { Box, Container, Flex } from "@chakra-ui/react";
 import React from "react";
 
 import { Footer } from "../Footer";
@@ -13,8 +13,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     <Box>
       <Flex minHeight={"100vh"} direction={"column"}>
         <Header />
-        <Container flex={1} maxW={"6xl"} p="12">
-          <Center>{children}</Center>
+        <Container flex={1} maxWidth="xl" p="12">
+          {children}
         </Container>
         <Footer />
       </Flex>

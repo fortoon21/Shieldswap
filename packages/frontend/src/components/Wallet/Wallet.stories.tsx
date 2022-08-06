@@ -1,10 +1,10 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { ConnectWallet as Component } from "./ConnectWallet";
+import { Wallet as Component } from "./Wallet";
 
 export default {
-  title: "Components/Connect Wallet",
+  title: "Components/Wallet",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
@@ -12,4 +12,4 @@ const Template: ComponentStory<typeof Component> = (args) => (
   <Component {...args} />
 );
 
-export const ConnectWallet = Template.bind({});
+export const Wallet = Template.bind({});
