@@ -1,4 +1,11 @@
-import { Box, Divider, Stack, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Stack,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React from "react";
 
 import { ConnectWalletWrapper } from "../ConnectWalletWrapper";
@@ -20,7 +27,9 @@ export const Swap: React.FC = () => {
           <Text>You Receive</Text>
           <Text>Selct Token</Text>
         </Stack>
-        <ConnectWalletWrapper>Swap</ConnectWalletWrapper>
+        <ConnectWalletWrapper>
+          <Button w="full">Swap</Button>
+        </ConnectWalletWrapper>
       </Stack>
     </Box>
   );
