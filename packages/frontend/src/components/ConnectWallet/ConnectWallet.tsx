@@ -1,5 +1,6 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 
 export const ConnectWallet: React.FC = () => {
-  return <React.Fragment>Connect Wallet</React.Fragment>;
+  return <Box>Connect Wallet</Box>;
 };

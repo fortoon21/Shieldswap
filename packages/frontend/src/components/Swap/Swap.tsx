@@ -1,5 +1,6 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 
 export const Swap: React.FC = () => {
-  return <React.Fragment>Swap</React.Fragment>;
+  return <Box>Swap</Box>;
 };

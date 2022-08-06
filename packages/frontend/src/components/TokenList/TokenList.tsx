@@ -1,5 +1,6 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 
 export const TokenList: React.FC = () => {
-  return <React.Fragment>TokenList</React.Fragment>;
+  return <Box>TokenList</Box>;
 };
