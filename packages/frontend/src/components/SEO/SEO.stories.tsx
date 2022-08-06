@@ -1,10 +1,10 @@
-import { ComponentMeta,ComponentStory } from "@storybook/react";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 
-import { Swap as Component } from "./Swap";
+import { SEO as Component } from "./SEO";
 
 export default {
-  title: "Components/Swap",
+  title: "Components/SEO",
   component: Component,
 } as ComponentMeta<typeof Component>;
 
@@ -12,4 +12,4 @@ const Template: ComponentStory<typeof Component> = (args) => (
   <Component {...args} />
 );
 
-export const Swap = Template.bind({});
+export const SEO = Template.bind({});
