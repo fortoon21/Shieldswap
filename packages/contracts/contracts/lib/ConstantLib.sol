@@ -2,5 +2,5 @@
 pragma solidity 0.8.7;
 
 library ConstantLib {
-    uint64 constant internal fee = 300;
+    uint64 constant internal FEE = 300;
 }

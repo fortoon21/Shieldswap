@@ -1,8 +1,7 @@
-import { expect } from "chai";
 import { ethers } from "hardhat";
-import { UniswapV2Viewer } from "../typechain-types";
 
 import address from "../address.json";
+import { UniswapV2Viewer } from "../typechain-types";
 
 const isDiplayResult = true;
 
@@ -16,26 +15,49 @@ describe("UniswapV2Viewer", function () {
     uniswapV2Viewer = await UniswapV2Viewer.deploy(3);
   });
 
-  it("pools", async function () {
-    const pools = await uniswapV2Viewer.pools(address.quickswapFactory);
-    if (isDiplayResult) {
-      console.log(pools);
-    }
+  describe("QuickSwap", function () {
+    it("pools", async function () {
+      const pools = await uniswapV2Viewer.pools(address.quickswapFactory);
+      if (isDiplayResult) {
+        console.log(pools);
+      }
+    });
+
+    it("poolInfos", async function () {
+      const poolInfos = await uniswapV2Viewer.poolInfos(address.quickswapFactory);
+      if (isDiplayResult) {
+        console.log(poolInfos);
+      }
+    });
+
+    it("tokenInfos", async function () {
+      const tokenInfos = await uniswapV2Viewer.tokenInfos(address.quickswapFactory);
+      if (isDiplayResult) {
+        console.log(tokenInfos);
+      }
+    });
   });
 
-  it("poolInfos", async function () {
-    const poolInfos = await uniswapV2Viewer.poolInfos(address.quickswapFactory);
-    if (isDiplayResult) {
-      console.log(poolInfos);
-    }
-  });
+  describe("SushiSwap", function () {
+    it("pools", async function () {
+      const pools = await uniswapV2Viewer.pools(address.quickswapFactory);
+      if (isDiplayResult) {
+        console.log(pools);
+      }
+    });
 
-  it("tokenInfos", async function () {
-    const tokenInfos = await uniswapV2Viewer.tokenInfos(
-      address.quickswapFactory
-    );
-    if (isDiplayResult) {
-      console.log(tokenInfos);
-    }
+    it("poolInfos", async function () {
+      const poolInfos = await uniswapV2Viewer.poolInfos(address.quickswapFactory);
+      if (isDiplayResult) {
+        console.log(poolInfos);
+      }
+    });
+
+    it("tokenInfos", async function () {
+      const tokenInfos = await uniswapV2Viewer.tokenInfos(address.quickswapFactory);
+      if (isDiplayResult) {
+        console.log(tokenInfos);
+      }
+    });
   });
 });
