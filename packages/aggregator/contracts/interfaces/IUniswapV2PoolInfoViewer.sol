@@ -1,14 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.7;
 
-library StructLib {
-    struct TokenInfo {
-        address token;
-        uint8 decimals;
-        string name;
-        string symbol;
-    }
-
+interface IUniswapV2PoolInfoViewer {
     struct UniswapV2PoolInfo {
         uint256 totalSupply;
         uint256[] tokenBalances;
@@ -19,4 +12,5 @@ library StructLib {
         string name;
         string symbol;
     }
+    function getPoolInfo(address pool) external view returns (UniswapV2PoolInfo memory);
 }
