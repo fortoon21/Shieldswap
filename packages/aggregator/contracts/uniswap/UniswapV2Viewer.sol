@@ -8,21 +8,26 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "../interfaces/IPoolViewer.sol";
 import "../interfaces/IUniswapV2PoolInfoViewer.sol";
 import "../lib/ConstantLib.sol";
+import "./TokenViewer.sol";
 
 /*
 * @dev: for test only
 */
 import "hardhat/console.sol";
 
-contract UniswapV2Viewer is IPoolViewer, IUniswapV2PoolInfoViewer {
-    function getPoolsLength(address factory) public view override returns (uint256) {
-        IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
+contract UniswapV2Viewer is TokenViewer, IPoolViewer, IUniswapV2PoolInfoViewer {
+    IUniswapV2Factory public uniswapV2Factory;
+
+    constructor(address factory) {
+      uniswapV2Factory = IUniswapV2Factory(factory);
+    }
+
+    function getPoolsLength() public view override returns (uint256) {
         uint256 pairsLength = uniswapV2Factory.allPairsLength();
         return pairsLength;
     }
 
-    function getPoolAddressByIndex(address factory, uint256 index) public view override returns (address) {
-      IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
+    function getPoolAddressByIndex(uint256 index) public view override returns (address) {
       return uniswapV2Factory.allPairs(index);
     }
 
