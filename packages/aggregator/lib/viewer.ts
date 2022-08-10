@@ -95,6 +95,9 @@ export class UniswapV2ViewerLib extends ViewerLib {
   };
 
   getPoolInfosByPools = async (pools: string[]) => {
+    if (pools.length === 0) {
+      return [];
+    }
     const chunkedMulticall = await this.createChunkedMulticall(pools.length, this.multicallContract.getPoolInfo, pools);
     let result = await this.processChunkedMulticall(chunkedMulticall);
     result = result.filter((PoolInfo) => {
@@ -124,8 +127,12 @@ export class UniswapV2ViewerLib extends ViewerLib {
   };
 
   getTokensByPoolInfos = async (poolInfos: any[]) => {
+    if (poolInfos.length === 0) {
+      return [];
+    }
     let tokenList = poolInfos.map((poolInfo) => poolInfo.tokenList).flat();
     tokenList = [...new Set(tokenList)];
+
     const chunkedMulticall = await this.createChunkedMulticall(
       tokenList.length,
       this.multicallContract.tokenInfo,

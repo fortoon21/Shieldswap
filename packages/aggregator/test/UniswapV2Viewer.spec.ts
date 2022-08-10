@@ -16,8 +16,7 @@ describe("UniswapV2Viewer", function () {
 
     this.beforeAll(async function () {
       const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const UniswapV2Viewer = await ethers.getContractFactory("UniswapV2Viewer");
-      const uniswapV2Viewer = await deployOrAttach(UniswapV2Viewer, address.quickswap.UniswapV2Factory);
+      const uniswapV2Viewer = await deployOrAttach("UniswapV2Viewer", address.quickswap.UniswapV2Factory);
       uniswapV2ViewerLib = new UniswapV2ViewerLib(
         ethers.provider,
         uniswapV2Viewer.address,

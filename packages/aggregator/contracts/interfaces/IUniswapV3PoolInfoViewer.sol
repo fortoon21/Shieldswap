@@ -1,14 +1,21 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.7;
 
-interface IUniswapV2PoolInfoViewer {
-  struct UniswapV2PoolInfo {
+interface IUniswapV3PoolInfoViewer {
+  struct UniswapV3PoolInfo {
     address pool;
     address[] tokenList;
-    uint256 price;
-    uint64[] protocolFees;
-    uint64 fee;
+    uint256 blockTimestamp;
+    uint160 sqrtPriceX96;
+    uint128 liquidity;
+    uint24 fee;
+    int24 tick;
+    uint16 observationIndex;
+    uint16 observationCardinality;
+    uint16 observationCardinalityNext;
+    uint8 feeProtocol;
+    bool unlocked;
   }
 
-  function getPoolInfo(address pool) external view returns (UniswapV2PoolInfo memory);
+  function getPoolInfo(address pool) external view returns (UniswapV3PoolInfo memory);
 }
