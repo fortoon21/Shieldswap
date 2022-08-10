@@ -25,6 +25,7 @@ export const ConnectWalletWrapper: React.FC<ConnectWalletWrapperProps> = ({ chil
             onClick={onOpen}
             size="lg"
             color="gray.800"
+            _hover={{ bg: "blue.50" }}
           >
             Connect Wallet
           </Button>

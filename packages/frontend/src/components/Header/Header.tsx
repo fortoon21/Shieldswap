@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
       <Flex justify="space-between" align="center">
         <HStack>
           <Icon as={AiOutlineFileProtect} color="purple.400" />
-          <Text fontSize="sm" fontWeight={"bold"} color="gray.800">
+          <Text fontSize="sm" fontWeight={"bold"} color="gray.800" cursor={"pointer"}>
             {SERVICE_NAME}
           </Text>
         </HStack>

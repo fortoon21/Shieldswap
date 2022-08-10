@@ -36,6 +36,7 @@ export const ConnectWallet: React.FC<ConnectWalletProps> = ({ callback }) => {
           onClick={connectMetamask}
           size="lg"
           color="gray.800"
+          _hover={{ bg: "blue.50" }}
         >
           <Image src="/metamask.webp" alt="metamask" w="4" mr="2" /> Metamask
         </Button>

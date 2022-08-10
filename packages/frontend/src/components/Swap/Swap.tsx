@@ -51,7 +51,16 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         </Flex>
       </Stack>
       <ConnectWalletWrapper>
-        <Button w="full" variant="outline" rounded="2xl" size="lg" fontSize="sm" color="gray.800">
+        <Button
+          w="full"
+          variant="outline"
+          rounded="2xl"
+          size="lg"
+          fontSize="sm"
+          color="white"
+          backgroundColor={"purple.400"}
+          _hover={{ bg: "purple.500" }}
+        >
           Swap
         </Button>
       </ConnectWalletWrapper>
@@ -62,8 +71,8 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
 export const Swap: React.FC = () => {
   return (
     <Stack spacing="4">
-      <Box boxShadow={"base"} borderRadius="2xl" pb="2">
-        <Tabs colorScheme="purple">
+      <Box boxShadow={"base"} borderRadius="2xl" pb="2" backgroundColor={"white"}>
+        <Tabs colorScheme="blue">
           <TabList>
             <Tab pb="4" pt="4" px="4" roundedTopLeft={"2xl"} color="gray.800">
               Swap
@@ -82,7 +91,7 @@ export const Swap: React.FC = () => {
           </TabPanels>
         </Tabs>
       </Box>
-      <HStack boxShadow={"base"} borderRadius="2xl" p="6" spacing="4">
+      <HStack boxShadow={"base"} borderRadius="2xl" p="6" spacing="4" backgroundColor={"white"}>
         <Flex backgroundColor={"purple.100"} w="10" h="10" justify={"center"} align="center" rounded="full">
           <Icon as={FaCoins} color="purple.400" />
         </Flex>
