@@ -20,11 +20,13 @@ export const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
     <Box>
       <_Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent m="4">
+        <ModalContent m="4" rounded="2xl">
           <ModalHeader>
             <ModalCloseButton />
           </ModalHeader>
-          <ModalBody p="8">{children}</ModalBody>
+          <ModalBody px="8" pt="4" pb="8">
+            {children}
+          </ModalBody>
         </ModalContent>
       </_Modal>
     </Box>
