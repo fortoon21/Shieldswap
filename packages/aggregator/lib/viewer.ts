@@ -96,16 +96,57 @@ export class UniswapV2ViewerLib extends ViewerLib {
 
   getPoolInfosByPools = async (pools: string[]) => {
     const chunkedMulticall = await this.createChunkedMulticall(pools.length, this.multicallContract.getPoolInfo, pools);
-    return await this.processChunkedMulticall(chunkedMulticall);
+    let result = await this.processChunkedMulticall(chunkedMulticall);
+    /*
+     * @dev: make it object array for export
+     */
+    result = result.map((v) => {
+      return {
+        totalSupply: v.totalSupply,
+        tokenBalances: v.tokenBalances,
+        pool: v.pool,
+        tokenList: v.tokenList,
+        fees: v.fees,
+        decimals: v.decimals,
+        name: v.name,
+        symbol: v.symbol,
+      };
+    });
+    return result;
   };
 
   getTokensByPoolInfos = async (poolInfos: any[]) => {
-    const tokenList = poolInfos.map((poolInfo) => poolInfo.tokenList).flat();
+    let tokenList = poolInfos
+      .filter((tokenInfo) => {
+        return (
+          /*
+           * @dev: remove one of token balance is zero
+           */
+          ethers.BigNumber.from(tokenInfo.tokenBalances[0]).gt(0) &&
+          ethers.BigNumber.from(tokenInfo.tokenBalances[0]).gt(1)
+        );
+      })
+      .map((poolInfo) => poolInfo.tokenList)
+      .flat();
+    tokenList = [...new Set(tokenList)];
     const chunkedMulticall = await this.createChunkedMulticall(
       tokenList.length,
       this.multicallContract.tokenInfo,
       tokenList
     );
-    return await this.processChunkedMulticall(chunkedMulticall);
+    let result = await this.processChunkedMulticall(chunkedMulticall);
+    result = result.filter((token) => {
+      /*
+       * @dev: remove token name and symbol is invalid
+       */
+      return token.name !== "" && token.string !== "";
+    });
+    /*
+     * @dev: make it object array for export
+     */
+    result = result.map((v) => {
+      return { token: v.token, decimals: v.decimals, name: v.name, symbol: v.symbol };
+    });
+    return result;
   };
 }

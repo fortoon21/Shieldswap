@@ -31,19 +31,19 @@ describe("UniswapV2Viewer", function () {
     it("getPools", async function () {
       pools = await uniswapV2ViewerLib.getPools();
       logger.log(pools);
-      // fs.writeFileSync(path.join(__dirname, "../output/", "pools.json"), JSON.stringify(pools));
+      fs.writeFileSync(path.join(__dirname, "../output/quickswap", "pools.json"), JSON.stringify(pools));
     });
 
     it("getPoolInfosByPools", async function () {
       poolInfos = await uniswapV2ViewerLib.getPoolInfosByPools(pools);
       logger.log(poolInfos);
-      // fs.writeFileSync(path.join(__dirname, "../output/", "poolInfos.json"), JSON.stringify(poolInfos));
+      fs.writeFileSync(path.join(__dirname, "../output/quickswap", "poolInfos.json"), JSON.stringify(poolInfos));
     });
 
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV2ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      // fs.writeFileSync(path.join(__dirname, "../output/", "poolInfos.json"), JSON.stringify(poolInfos));
+      fs.writeFileSync(path.join(__dirname, "../output/quickswap", "tokenInfos.json"), JSON.stringify(poolInfos));
     });
   });
 });
