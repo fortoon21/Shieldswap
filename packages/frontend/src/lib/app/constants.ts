@@ -1,3 +1,2 @@
-export const SERVICE_NAME = "JK BRIDGE";
-export const TOKEN_LIST_URI =
-  "https://api-polygon-tokens.polygon.technology/tokenlists/default.tokenlist.json";
+export const SERVICE_NAME = "ShiledSwap";
+export const SERVICE_DESCRIPTION = "MEV Resistant Flashloanable DEX Aggregator";

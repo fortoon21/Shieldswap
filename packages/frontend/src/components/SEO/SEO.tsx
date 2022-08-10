@@ -1,7 +1,7 @@
 import NextHead from "next/head";
 import React from "react";
 
-import { SERVICE_NAME } from "../../lib/app/constants";
+import { SERVICE_DESCRIPTION, SERVICE_NAME } from "../../lib/app/constants";
 
 export const SEO: React.FC = () => {
   return (
@@ -13,9 +13,9 @@ export const SEO: React.FC = () => {
       <meta property="og:type" content="website" />
       <meta property="og:title" content={SERVICE_NAME} />
       <meta property="og:site_name" content={SERVICE_NAME} />
-      {/* <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta name="twitter:card" content={type} /> */}
+      <meta property="og:description" content={SERVICE_DESCRIPTION} />
+      {/* <meta property="og:image" content={image} />
+      <meta name="twitter:card" content={type} />  */}
     </NextHead>
   );
 };

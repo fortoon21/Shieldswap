@@ -1,26 +1,19 @@
 import { Box, ButtonGroup, IconButton, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
-import { SERVICE_NAME } from "../../lib/app/constants";
+import { SERVICE_DESCRIPTION } from "../../lib/app/constants";
 import { icons } from "./data";
 
 export const Footer: React.FC = () => {
   return (
-    <Box p="4" as="footer">
+    <Box px="4" py="2" as="footer">
       <Stack justify="space-between" direction="row" align="center">
-        <Text>
-          &copy; {new Date().getFullYear()} {SERVICE_NAME}
+        <Text fontSize="xs" fontWeight={"bold"} color="gray.600">
+          {SERVICE_DESCRIPTION}
         </Text>
         <ButtonGroup variant={"ghost"}>
           {icons.map((icon) => (
-            <IconButton
-              key={icon.key}
-              as="a"
-              href={icon.href}
-              target="_blank"
-              aria-label={icon.key}
-              icon={icon.icon}
-            />
+            <IconButton key={icon.key} as="a" href={icon.href} target="_blank" aria-label={icon.key} icon={icon.icon} />
           ))}
         </ButtonGroup>
       </Stack>

@@ -10,10 +10,10 @@ export interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <Box>
+    <Box bgGradient="linear(to-t, blue.50, purple.50)">
       <Flex minHeight={"100vh"} direction={"column"}>
         <Header />
-        <Container flex={1} maxWidth="xl" p="12">
+        <Container flex={1} maxWidth="md" px="4" pt="4">
           {children}
         </Container>
         <Footer />

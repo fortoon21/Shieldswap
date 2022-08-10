@@ -1,8 +1,7 @@
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 
-// import { useAccount } from "wagmi";
-import { useIsWagmiConnected } from "../../hooks/useIsWagmiConnected";
+import { useIsWagmiConnected } from "../../../hooks/useIsWagmiConnected";
 import { ConnectWallet } from "../ConnectWallet";
 import { Modal } from "../Modal";
 
@@ -10,9 +9,7 @@ export interface ConnectWalletWrapperProps {
   children: React.ReactNode;
 }
 
-export const ConnectWalletWrapper: React.FC<ConnectWalletWrapperProps> = ({
-  children,
-}) => {
+export const ConnectWalletWrapper: React.FC<ConnectWalletWrapperProps> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isWagmiConnected } = useIsWagmiConnected();
 
@@ -20,11 +17,20 @@ export const ConnectWalletWrapper: React.FC<ConnectWalletWrapperProps> = ({
     <Box>
       {!isWagmiConnected && (
         <Box>
-          <Button width="full" onClick={onOpen}>
+          <Button
+            variant="outline"
+            rounded="2xl"
+            width="full"
+            fontSize={"sm"}
+            onClick={onOpen}
+            size="lg"
+            color="gray.800"
+            _hover={{ bg: "blue.50" }}
+          >
             Connect Wallet
           </Button>
           <Modal onClose={onClose} isOpen={isOpen}>
-            <ConnectWallet />
+            <ConnectWallet callback={onClose} />
           </Modal>
         </Box>
       )}
