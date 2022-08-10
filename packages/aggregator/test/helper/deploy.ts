@@ -1,11 +1,16 @@
+import { ethers } from "hardhat";
+
+import address from "../../address.json";
 import { logger } from "../../lib/logger";
 
-export const deployOrAttach = async (factory: any, ...args: any[]) => {
+export const deployOrAttach = async (contractName: "UniswapV2Viewer" | "UniswapV3Viewer", ...args: any[]) => {
+  const factory = await ethers.getContractFactory(contractName);
   let contract;
 
-  if (process.env.USE_DEPLOYED_CONTRACT) {
-    logger.log("using contract", process.env.USE_DEPLOYED_CONTRACT);
-    contract = factory.attach(process.env.USE_DEPLOYED_CONTRACT);
+  const deployed = address.deployed[contractName];
+  if (deployed !== "") {
+    logger.log("using contract", deployed);
+    contract = factory.attach(deployed);
   } else {
     contract = await factory.deploy(...args);
     await contract.deployed();

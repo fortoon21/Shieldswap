@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/interfaces/IERC20Metadata.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
-import "../interfaces/IPoolViewer.sol";
 import "../interfaces/IUniswapV2PoolInfoViewer.sol";
 import "../lib/ConstantLib.sol";
 import "./TokenViewer.sol";
@@ -15,7 +14,7 @@ import "./TokenViewer.sol";
  */
 import "hardhat/console.sol";
 
-contract UniswapV2Viewer is TokenViewer, IPoolViewer, IUniswapV2PoolInfoViewer {
+contract UniswapV2Viewer is TokenViewer, IUniswapV2PoolInfoViewer {
   IUniswapV2Factory public uniswapV2Factory;
 
   constructor(address factory) {
