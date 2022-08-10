@@ -28,11 +28,21 @@ export const ConnectWallet: React.FC<ConnectWalletProps> = ({ callback }) => {
   return (
     <Box>
       <Stack spacing="4">
-        <Button rounded="2xl" width="full" fontSize={"sm"} variant="outline" onClick={connectMetamask}>
+        <Button
+          rounded="2xl"
+          width="full"
+          fontSize={"sm"}
+          variant="outline"
+          onClick={connectMetamask}
+          size="lg"
+          color="gray.800"
+          _hover={{ bg: "blue.50" }}
+        >
           <Image src="/metamask.webp" alt="metamask" w="4" mr="2" /> Metamask
         </Button>
         <Button
           rounded="2xl"
+          size="lg"
           width="full"
           fontSize={"sm"}
           variant="outline"
