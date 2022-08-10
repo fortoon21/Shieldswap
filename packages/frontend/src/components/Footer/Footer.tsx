@@ -6,9 +6,9 @@ import { icons } from "./data";
 
 export const Footer: React.FC = () => {
   return (
-    <Box p="4" as="footer">
+    <Box px="4" py="2" as="footer">
       <Stack justify="space-between" direction="row" align="center">
-        <Text fontSize="xs" fontWeight={"bold"}>
+        <Text fontSize="xs" fontWeight={"bold"} color="gray.600">
           {SERVICE_DESCRIPTION}
         </Text>
         <ButtonGroup variant={"ghost"}>

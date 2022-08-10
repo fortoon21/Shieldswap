@@ -17,7 +17,15 @@ export const ConnectWalletWrapper: React.FC<ConnectWalletWrapperProps> = ({ chil
     <Box>
       {!isWagmiConnected && (
         <Box>
-          <Button variant="outline" rounded="2xl" width="full" fontSize={"sm"} onClick={onOpen}>
+          <Button
+            variant="outline"
+            rounded="2xl"
+            width="full"
+            fontSize={"sm"}
+            onClick={onOpen}
+            size="lg"
+            color="gray.800"
+          >
             Connect Wallet
           </Button>
           <Modal onClose={onClose} isOpen={isOpen}>
