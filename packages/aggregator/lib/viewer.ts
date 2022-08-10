@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { Contract, Provider } from "ethers-multicall";
 
-import UniswapV2ViewerArtifact from "../artifacts/contracts/uniswap/UniswapV2Viewer.sol/UniswapV2Viewer.json";
+import UniswapV2ViewerArtifact from "../artifacts/contracts/implements/UniswapV2Viewer.sol/UniswapV2Viewer.json";
 import { UniswapV2Viewer } from "../typechain-types";
 import { logger } from "./logger";
 
@@ -97,6 +97,14 @@ export class UniswapV2ViewerLib extends ViewerLib {
   getPoolInfosByPools = async (pools: string[]) => {
     const chunkedMulticall = await this.createChunkedMulticall(pools.length, this.multicallContract.getPoolInfo, pools);
     let result = await this.processChunkedMulticall(chunkedMulticall);
+    result = result.filter((PoolInfo) => {
+      return (
+        /*
+         * @dev: remove one of token balance is zero
+         */
+        ethers.BigNumber.from(PoolInfo.tokenBalances[0]).gt(0) && ethers.BigNumber.from(PoolInfo.tokenBalances[0]).gt(1)
+      );
+    });
     /*
      * @dev: make it object array for export
      */
@@ -116,18 +124,7 @@ export class UniswapV2ViewerLib extends ViewerLib {
   };
 
   getTokensByPoolInfos = async (poolInfos: any[]) => {
-    let tokenList = poolInfos
-      .filter((tokenInfo) => {
-        return (
-          /*
-           * @dev: remove one of token balance is zero
-           */
-          ethers.BigNumber.from(tokenInfo.tokenBalances[0]).gt(0) &&
-          ethers.BigNumber.from(tokenInfo.tokenBalances[0]).gt(1)
-        );
-      })
-      .map((poolInfo) => poolInfo.tokenList)
-      .flat();
+    let tokenList = poolInfos.map((poolInfo) => poolInfo.tokenList).flat();
     tokenList = [...new Set(tokenList)];
     const chunkedMulticall = await this.createChunkedMulticall(
       tokenList.length,
