@@ -20,12 +20,6 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    hardhat: {
-      forking: {
-        url: rpc,
-      },
-      chainId: 80001,
-    },
     mumbai: {
       url: rpc,
       accounts,

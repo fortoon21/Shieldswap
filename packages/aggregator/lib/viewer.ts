@@ -215,7 +215,7 @@ export class UniswapV3ViewerLib extends ViewerLib {
   }
 
   async getPools() {
-    if (process.env.IS_THE_GRAPH_ENABLED) {
+    if (process.env.IS_THE_GRAPH_ENABLED === "true") {
       const result = await clients.v3.query({ query: QUERY_POOLS_ID });
       return result.data.pools.map((pool: any) => pool.id);
     } else {
