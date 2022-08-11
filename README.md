@@ -19,7 +19,9 @@ The graph is used for aggregating pool info. We are aggregating all pool informa
 
 #### Line of integration
 
-https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b4f18/packages/aggregator/lib/viewer.ts#L218
+https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b4f18/packages/aggregator/lib/viewer.ts#L218-L221
+
+https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b4f18/packages/aggregator/lib/thegraph.ts#L5-L10
 
 ### Polygon
 
