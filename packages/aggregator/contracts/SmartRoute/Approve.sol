@@ -6,6 +6,11 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 
 import {InitializableOwnable} from "../lib/InitializableOwnable.sol";
 
+/*
+ * @dev: for test only
+ */
+import "hardhat/console.sol";
+
 contract Approve is InitializableOwnable {
   using SafeERC20 for IERC20;
 
