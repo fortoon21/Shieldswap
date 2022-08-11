@@ -13,10 +13,9 @@ import "./intf/IUniswapV2PoolInfoViewer.sol";
 import "hardhat/console.sol";
 
 contract UniswapV2Viewer is IUniswapV2PoolInfoViewer {
-
   /*
-  * @TODO: need to check this fee is compartible to our service, since 0.3 is 3000 for uniswap v3, so I guess 300 does not work
-  */
+   * @TODO: need to check this fee is compartible to our service, since 0.3 is 3000 for uniswap v3, so I guess 300 does not work
+   */
   uint64 public constant FEE = 300;
 
   function getPoolInfo(address factory, address pool) public view override returns (UniswapV2PoolInfo memory) {
