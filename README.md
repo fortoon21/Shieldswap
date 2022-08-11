@@ -2,9 +2,15 @@
 
 MEV Resistant Flashloanable DEX Aggregator
 
+![key visual](./packages/frontend/public/docs/key-visual.png)
+
 ## Technical Integration
 
 ### The graph
+
+#### Diagram
+
+![the graph diagram](./packages/frontend/public/docs/the-graph-usage.png)
 
 #### Used subgraph
 

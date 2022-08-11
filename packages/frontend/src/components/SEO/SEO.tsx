@@ -14,7 +14,7 @@ export const SEO: React.FC = () => {
       <meta property="og:title" content={SERVICE_NAME} />
       <meta property="og:site_name" content={SERVICE_NAME} />
       <meta property="og:description" content={SERVICE_DESCRIPTION} />
-      <meta property="og:image" content={`${SERVICE_BASE_URL}/ogp.png`} />
+      <meta property="og:image" content={`${SERVICE_BASE_URL}/docs/key-visual.png`} />
       <meta name="twitter:card" content={"summary_large_image"} />
     </NextHead>
   );
