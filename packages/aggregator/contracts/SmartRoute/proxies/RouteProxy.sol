@@ -608,7 +608,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
     address token,
     uint256 amount
   ) internal {
-    if (from == address(0)) {
+    if (token == address(0)) {
       require(msg.value == amount, "ETH_VALUE_WRONG");
     } else {
       IApproveProxy(_APPROVE_PROXY_).claimTokens(token, from, address(this), amount);
