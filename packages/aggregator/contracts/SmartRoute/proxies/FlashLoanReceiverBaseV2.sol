@@ -16,16 +16,16 @@ import "../../lib/Withdrawable.sol";
     !!!
  */
 abstract contract FlashLoanReceiverBaseV2 is IFlashLoanReceiverV2 {
-    using SafeERC20 for IERC20;
-    using SafeMath for uint256;
+  using SafeERC20 for IERC20;
+  using SafeMath for uint256;
 
-    ILendingPoolAddressesProviderV2 public immutable override ADDRESSES_PROVIDER;
-    ILendingPoolV2 public immutable override LENDING_POOL;
+  ILendingPoolAddressesProviderV2 public immutable override ADDRESSES_PROVIDER;
+  ILendingPoolV2 public immutable override LENDING_POOL;
 
-    constructor(address provider) {
-        ADDRESSES_PROVIDER = ILendingPoolAddressesProviderV2(provider);
-        LENDING_POOL = ILendingPoolV2(ILendingPoolAddressesProviderV2(provider).getLendingPool());
-    }
+  constructor(address provider) {
+    ADDRESSES_PROVIDER = ILendingPoolAddressesProviderV2(provider);
+    LENDING_POOL = ILendingPoolV2(ILendingPoolAddressesProviderV2(provider).getLendingPool());
+  }
 
-    receive() external payable {}
+  receive() external payable {}
 }

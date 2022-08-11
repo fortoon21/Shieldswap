@@ -5,6 +5,7 @@ import address from "../address.json";
 import { exporter } from "../lib/exporter";
 import { logger } from "../lib/logger";
 import { UniswapV2ViewerLib } from "../lib/viewer";
+import { NetworkName } from "../types/network";
 import { deployOrAttach } from "./helper/deploy";
 import { getMulticallConfigByNetwork } from "./helper/limit";
 
@@ -15,9 +16,9 @@ describe("UniswapV2Viewer", function () {
     let poolInfos: any[];
 
     this.beforeAll(async function () {
-      const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const tokenViewer = await deployOrAttach("TokenViewer");
-      const uniswapV2Viewer = await deployOrAttach("UniswapV2Viewer");
+      const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork();
+      const { contract: tokenViewer } = await deployOrAttach(network.name as NetworkName, "TokenViewer");
+      const { contract: uniswapV2Viewer } = await deployOrAttach(network.name as NetworkName, "UniswapV2Viewer");
       uniswapV2ViewerLib = new UniswapV2ViewerLib(
         ethers.provider,
         address.quickswap.UniswapV2Factory,
@@ -54,9 +55,9 @@ describe("UniswapV2Viewer", function () {
     let poolInfos: any[];
 
     this.beforeAll(async function () {
-      const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const tokenViewer = await deployOrAttach("TokenViewer");
-      const uniswapV2Viewer = await deployOrAttach("UniswapV2Viewer");
+      const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork();
+      const { contract: tokenViewer } = await deployOrAttach(network.name as NetworkName, "TokenViewer");
+      const { contract: uniswapV2Viewer } = await deployOrAttach(network.name as NetworkName, "UniswapV2Viewer");
       uniswapV2ViewerLib = new UniswapV2ViewerLib(
         ethers.provider,
         address.sushiswap.UniswapV2Factory,

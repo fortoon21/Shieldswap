@@ -5,6 +5,7 @@ import address from "../address.json";
 import { exporter } from "../lib/exporter";
 import { logger } from "../lib/logger";
 import { UniswapV3ViewerLib } from "../lib/viewer";
+import { NetworkName } from "../types/network";
 import { deployOrAttach } from "./helper/deploy";
 import { getMulticallConfigByNetwork } from "./helper/limit";
 
@@ -15,9 +16,9 @@ describe("UniswapV3Viewer", function () {
     let poolInfos: any[];
 
     this.beforeAll(async function () {
-      const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const tokenViewer = await deployOrAttach("TokenViewer");
-      const uniswapV3Viewer = await deployOrAttach("UniswapV3Viewer");
+      const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork();
+      const { contract: tokenViewer } = await deployOrAttach(network.name as NetworkName, "TokenViewer");
+      const { contract: uniswapV3Viewer } = await deployOrAttach(network.name as NetworkName, "UniswapV3Viewer");
       uniswapV3ViewerLib = new UniswapV3ViewerLib(
         ethers.provider,
         address.uniswap.UniswapV3Factory,
