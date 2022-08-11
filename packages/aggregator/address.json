@@ -1,7 +1,8 @@
 {
   "deployed": {
     "UniswapV2Viewer": "0xa8279e3f2266254DF033C5ac695069b838ED4987",
-    "UniswapV3Viewer": "0xB44e00d23CC8f1d05c73239cc5327a188C41dd93"
+    "UniswapV3Viewer": "0xB44e00d23CC8f1d05c73239cc5327a188C41dd93",
+    "UniAdapter": "0x"
   },
   "uniswap": { "UniswapV3Factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984" },
   "quickswap": { "UniswapV2Factory": "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32" },

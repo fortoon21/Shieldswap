@@ -1,5 +1,4 @@
 import "@nomicfoundation/hardhat-toolbox";
-
 import { HardhatUserConfig } from "hardhat/config";
 
 const accounts = process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [];
