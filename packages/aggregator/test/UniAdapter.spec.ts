@@ -6,14 +6,13 @@ import { deployOrAttach } from "./helper/deploy";
 
 describe("UniAdapter", function () {
   let uniAdapter: UniAdapter;
-  describe("Uni2AMM", function () {
+  describe("Unit Test", function () {
     this.beforeAll(async function () {
       const { contract: deployedUniAdapter } = await deployOrAttach(network.name as NetworkName, "UniAdapter", []);
       uniAdapter = deployedUniAdapter as UniAdapter;
     });
-  });
-
-  it.skip("factory", async function () {
-    console.log("NOT IMPLEMENTED");
+    it.skip("factory", async function () {
+      console.log("NOT IMPLEMENTED");
+    });
   });
 });

@@ -21,7 +21,8 @@ describe("Approve", function () {
   let mockErc20: MockERC20;
 
   const tokenAmount = "100";
-  describe("Uni2AMM", function () {
+
+  describe("Unit Test", function () {
     this.beforeAll(async function () {
       [signer, malicious, owner, proxy, holder, other] = await ethers.getSigners();
       const constructorParam = [] as any;
@@ -33,7 +34,7 @@ describe("Approve", function () {
       const { contract: deployedApprove, type } = await deployOrAttach(
         network.name as NetworkName,
         "Approve",
-        constructorParam
+        ...constructorParam
       );
       approve = deployedApprove as Approve;
       if (type === "created") {

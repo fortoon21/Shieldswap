@@ -5,7 +5,14 @@ import { logger } from "../../lib/logger";
 
 export const deployOrAttach = async (
   networkName: "hardhat" | "mumbai",
-  contractName: "TokenViewer" | "UniswapV2Viewer" | "UniswapV3Viewer" | "Approve" | "UniAdapter" | "RouteProxy",
+  contractName:
+    | "TokenViewer"
+    | "UniswapV2Viewer"
+    | "UniswapV3Viewer"
+    | "Approve"
+    | "ApproveProxy"
+    | "UniAdapter"
+    | "RouteProxy",
   ...args: any[]
 ) => {
   const factory = await ethers.getContractFactory(contractName);
