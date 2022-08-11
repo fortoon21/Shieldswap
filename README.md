@@ -17,6 +17,10 @@ https://thegraph.com/hosted-service/subgraph/0xfind/uniswap-v3-mumbai
 
 The graph is used for aggregating pool info. We are aggregating all pool informaion from event, but we can have better performance using The Graph.
 
+#### Line of integration
+
+https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b4f18/packages/aggregator/lib/viewer.ts#L218
+
 ### Polygon
 
 #### Deployed Contracts
