@@ -4,6 +4,11 @@ pragma solidity 0.8.15;
 import {IApprove} from "../intf/IApprove.sol";
 import {InitializableOwnable} from "../lib/InitializableOwnable.sol";
 
+/*
+ * @dev: for test only
+ */
+import "hardhat/console.sol";
+
 interface IApproveProxy {
   function isAllowedProxy(address _proxy) external view returns (bool);
 
