@@ -13,9 +13,5 @@ interface IUniswapV2PoolInfoViewer {
     string symbol;
   }
 
-  function getPoolsLength() external view returns (uint256);
-
-  function getPoolAddressByIndex(uint256 index) external view returns (address);
-
-  function getPoolInfo(address pool) external view returns (UniswapV2PoolInfo memory);
+  function getPoolInfo(address factoryAddress, address pool) external view returns (UniswapV2PoolInfo memory);
 }

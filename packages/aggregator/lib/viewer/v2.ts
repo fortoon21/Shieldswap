@@ -1,14 +1,24 @@
 import { ethers } from "ethers";
 import { Contract, Provider } from "ethers-multicall";
 
-import IUniswapV3FactoryArtifact from "../artifacts/@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol/IUniswapV3Factory.json";
-import UniswapV2ViewerArtifact from "../artifacts/contracts/implements/UniswapV2Viewer.sol/UniswapV2Viewer.json";
-import UniswapV3ViewerArtifact from "../artifacts/contracts/implements/UniswapV3Viewer.sol/UniswapV3Viewer.json";
-import { IUniswapV3Factory, UniswapV2Viewer, UniswapV3Viewer } from "../typechain-types";
-import { logger } from "./logger";
+import IUniswapV3FactoryArtifact from "../../artifacts/@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol/IUniswapV3Factory.json";
+import TokenViewerArtifact from "../../artifacts/contracts/implements/TokenViewer.sol/TokenViewer.json";
+import UniswapV2ViewerArtifact from "../../artifacts/contracts/implements/UniswapV2Viewer.sol/UniswapV2Viewer.json";
+import UniswapV3ViewerArtifact from "../../artifacts/contracts/implements/UniswapV3Viewer.sol/UniswapV3Viewer.json";
+import {
+  IUniswapV2Factory,
+  IUniswapV3Factory,
+  TokenViewer,
+  UniswapV2Viewer,
+  UniswapV3Viewer,
+} from "../../typechain-types";
+import { logger } from "../logger";
 
 export class ViewerLib {
   provider: ethers.providers.JsonRpcProvider;
+  factoryAddress: string;
+  tokenViewer: TokenViewer;
+  multicallTokenViewer: Contract;
   multicallProvider: Provider;
   multicallChunkLength: number;
   chunckedMulticallConcurrency: number;
@@ -16,11 +26,16 @@ export class ViewerLib {
 
   constructor(
     provider: ethers.providers.JsonRpcProvider,
+    factoryAddress: string,
+    tokenViewerAddress: string,
     multicallChunkLength: number,
     chunckedMulticallConcurrency: number,
     limit?: number
   ) {
     this.provider = provider;
+    this.factoryAddress = factoryAddress;
+    this.tokenViewer = new ethers.Contract(tokenViewerAddress, TokenViewerArtifact.abi, provider) as TokenViewer;
+    this.multicallTokenViewer = new Contract(tokenViewerAddress, TokenViewerArtifact.abi);
     this.multicallProvider = new Provider(provider);
     this.multicallChunkLength = multicallChunkLength;
     this.chunckedMulticallConcurrency = chunckedMulticallConcurrency;
@@ -35,14 +50,15 @@ export class ViewerLib {
   }
 
   // TODO: better typing
-  createChunkedMulticall(length: number, multicallingFunction: any, values: "index" | string[]) {
+  createChunkedMulticall(length: number, multicallingFunction: any, withFactory: boolean, values: "index" | string[]) {
     length = this.limit ? this.limit : length;
     const chunkedMulticalls = [];
     let multicalls = [];
     const isCompleted = false;
     let i = 0;
     while (!isCompleted) {
-      multicalls.push(multicallingFunction(values === "index" ? i : values[i]));
+      const v = values === "index" ? i : values[i];
+      multicalls.push(multicallingFunction(...(withFactory ? [this.factoryAddress, v] : [v])));
       i++;
       if (i % this.multicallChunkLength === 0 || i === length) {
         chunkedMulticalls.push(multicalls);
@@ -70,30 +86,62 @@ export class ViewerLib {
     }
     return result;
   }
+
+  async getTokensByPoolInfos(poolInfos: any[]) {
+    if (poolInfos.length === 0) {
+      return [];
+    }
+    let tokenList = poolInfos.map((poolInfo) => poolInfo.tokenList).flat();
+    tokenList = [...new Set(tokenList)];
+    const chunkedMulticall = await this.createChunkedMulticall(
+      tokenList.length,
+      this.multicallTokenViewer.tokenInfo,
+      false,
+      tokenList
+    );
+    let result = await this.processChunkedMulticall(chunkedMulticall);
+    result = result.filter((token) => {
+      /*
+       * @dev: remove token name and symbol is invalid
+       */
+      return token.name !== "" && token.string !== "";
+    });
+    /*
+     * @dev: make it object array for export
+     */
+    result = result.map((v) => {
+      return { token: v.token, decimals: v.decimals, name: v.name, symbol: v.symbol };
+    });
+    return result;
+  }
 }
 
 export class UniswapV2ViewerLib extends ViewerLib {
-  viewer: UniswapV2Viewer;
-  multicallContract: Contract;
+  factory: IUniswapV2Factory;
+  poolViewer: UniswapV2Viewer;
+  multicallViwer: Contract;
 
   constructor(
     prvider: ethers.providers.JsonRpcProvider,
-    address: string,
+    factoryAddress: string,
+    tokenViewerAddress: string,
+    poolViewerAddress: string,
     multicallChunkLength: number,
     chunckedMulticallConcurrency: number,
     limit?: number
   ) {
-    super(prvider, multicallChunkLength, chunckedMulticallConcurrency, limit);
-
-    this.viewer = new ethers.Contract(address, UniswapV2ViewerArtifact.abi, prvider) as UniswapV2Viewer;
-    this.multicallContract = new Contract(address, UniswapV2ViewerArtifact.abi);
+    super(prvider, factoryAddress, tokenViewerAddress, multicallChunkLength, chunckedMulticallConcurrency, limit);
+    this.factory = new ethers.Contract(factoryAddress, UniswapV2ViewerArtifact.abi, this.provider) as IUniswapV2Factory;
+    this.poolViewer = new ethers.Contract(poolViewerAddress, UniswapV2ViewerArtifact.abi, prvider) as UniswapV2Viewer;
+    this.multicallViwer = new Contract(poolViewerAddress, UniswapV2ViewerArtifact.abi);
   }
 
   async getPools() {
-    const poolLength = await this.viewer.getPoolsLength();
+    const poolLength = await this.poolViewer.getPoolsLength(this.factoryAddress);
     const chunkedMulticall = await this.createChunkedMulticall(
       poolLength.toNumber(),
-      this.multicallContract.getPoolAddressByIndex,
+      this.multicallViwer.getPoolAddressByIndex,
+      true,
       "index"
     );
     return await this.processChunkedMulticall(chunkedMulticall);
@@ -103,7 +151,12 @@ export class UniswapV2ViewerLib extends ViewerLib {
     if (pools.length === 0) {
       return [];
     }
-    const chunkedMulticall = await this.createChunkedMulticall(pools.length, this.multicallContract.getPoolInfo, pools);
+    const chunkedMulticall = await this.createChunkedMulticall(
+      pools.length,
+      this.multicallViwer.getPoolInfo,
+      true,
+      pools
+    );
     let result = await this.processChunkedMulticall(chunkedMulticall);
     result = result.filter((PoolInfo) => {
       return (
@@ -130,62 +183,30 @@ export class UniswapV2ViewerLib extends ViewerLib {
     });
     return result;
   }
-
-  async getTokensByPoolInfos(poolInfos: any[]) {
-    if (poolInfos.length === 0) {
-      return [];
-    }
-    let tokenList = poolInfos.map((poolInfo) => poolInfo.tokenList).flat();
-    tokenList = [...new Set(tokenList)];
-
-    const chunkedMulticall = await this.createChunkedMulticall(
-      tokenList.length,
-      this.multicallContract.tokenInfo,
-      tokenList
-    );
-    let result = await this.processChunkedMulticall(chunkedMulticall);
-    result = result.filter((token) => {
-      /*
-       * @dev: remove token name and symbol is invalid
-       */
-      return token.name !== "" && token.string !== "";
-    });
-    /*
-     * @dev: make it object array for export
-     */
-    result = result.map((v) => {
-      return { token: v.token, decimals: v.decimals, name: v.name, symbol: v.symbol };
-    });
-    return result;
-  }
 }
 
 export class UniswapV3ViewerLib extends ViewerLib {
-  viewer: UniswapV3Viewer;
-  multicallContract: Contract;
   factory: IUniswapV3Factory;
+  viewer: UniswapV3Viewer;
+  multicallViwer: Contract;
 
   constructor(
     prvider: ethers.providers.JsonRpcProvider,
-    address: string,
+    factoryAddress: string,
+    tokenViewerAddress: string,
+    poolViewerAddress: string,
     multicallChunkLength: number,
     chunckedMulticallConcurrency: number,
     limit?: number
   ) {
-    super(prvider, multicallChunkLength, chunckedMulticallConcurrency, limit);
-    this.viewer = new ethers.Contract(address, UniswapV3ViewerArtifact.abi, prvider) as UniswapV3Viewer;
+    super(prvider, factoryAddress, tokenViewerAddress, multicallChunkLength, chunckedMulticallConcurrency, limit);
     this.factory = new ethers.Contract(
-      "0x0000000000000000000000000000000000000000",
+      factoryAddress,
       IUniswapV3FactoryArtifact.abi,
       this.provider
     ) as IUniswapV3Factory;
-    this.multicallContract = new Contract(address, UniswapV3ViewerArtifact.abi);
-  }
-
-  async init() {
-    const uniswapV3FacotyAddress = await this.viewer.uniswapV3Factory();
-    this.factory = this.factory.attach(uniswapV3FacotyAddress);
-    await super.init();
+    this.viewer = new ethers.Contract(poolViewerAddress, UniswapV3ViewerArtifact.abi, prvider) as UniswapV3Viewer;
+    this.multicallViwer = new Contract(poolViewerAddress, UniswapV3ViewerArtifact.abi);
   }
 
   async getPools() {
@@ -202,7 +223,12 @@ export class UniswapV3ViewerLib extends ViewerLib {
     if (pools.length === 0) {
       return [];
     }
-    const chunkedMulticall = await this.createChunkedMulticall(pools.length, this.multicallContract.getPoolInfo, pools);
+    const chunkedMulticall = await this.createChunkedMulticall(
+      pools.length,
+      this.multicallViwer.getPoolInfo,
+      true,
+      pools
+    );
     let result = await this.processChunkedMulticall(chunkedMulticall);
 
     result = result.filter((PoolInfo) => {
@@ -232,33 +258,6 @@ export class UniswapV3ViewerLib extends ViewerLib {
         feeProtocol: v.feeProtocol,
         unlocked: v.unlocked,
       };
-    });
-    return result;
-  }
-
-  async getTokensByPoolInfos(poolInfos: any[]) {
-    if (poolInfos.length === 0) {
-      return [];
-    }
-    let tokenList = poolInfos.map((poolInfo) => poolInfo.tokenList).flat();
-    tokenList = [...new Set(tokenList)];
-    const chunkedMulticall = await this.createChunkedMulticall(
-      tokenList.length,
-      this.multicallContract.tokenInfo,
-      tokenList
-    );
-    let result = await this.processChunkedMulticall(chunkedMulticall);
-    result = result.filter((token) => {
-      /*
-       * @dev: remove token name and symbol is invalid
-       */
-      return token.name !== "" && token.string !== "";
-    });
-    /*
-     * @dev: make it object array for export
-     */
-    result = result.map((v) => {
-      return { token: v.token, decimals: v.decimals, name: v.name, symbol: v.symbol };
     });
     return result;
   }

@@ -6,31 +6,32 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
 import "../interfaces/IUniswapV2PoolInfoViewer.sol";
-import "../lib/ConstantLib.sol";
-import "./TokenViewer.sol";
 
 /*
  * @dev: for test only
  */
 import "hardhat/console.sol";
 
-contract UniswapV2Viewer is TokenViewer, IUniswapV2PoolInfoViewer {
-  IUniswapV2Factory public uniswapV2Factory;
+contract UniswapV2Viewer is IUniswapV2PoolInfoViewer {
 
-  constructor(address factory) {
-    uniswapV2Factory = IUniswapV2Factory(factory);
-  }
+  /*
+  * @TODO: need to check this fee is compartible to our service, since 0.3 is 3000 for uniswap v3, so I guess 300 does not work
+  */
+  uint64 public constant FEE = 300;
 
-  function getPoolsLength() public view override returns (uint256) {
+  function getPoolsLength(address factory) public view returns (uint256) {
+    IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
     uint256 pairsLength = uniswapV2Factory.allPairsLength();
     return pairsLength;
   }
 
-  function getPoolAddressByIndex(uint256 index) public view override returns (address) {
+  function getPoolAddressByIndex(address factory, uint256 index) public view returns (address) {
+    IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
     return uniswapV2Factory.allPairs(index);
   }
 
-  function getPoolInfo(address pool) public view override returns (UniswapV2PoolInfo memory) {
+  function getPoolInfo(address factory, address pool) public view override returns (UniswapV2PoolInfo memory) {
+    IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
     IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(pool);
     address[] memory tokenList = new address[](2);
     tokenList[0] = uniswapV2Pair.token0();
@@ -38,7 +39,7 @@ contract UniswapV2Viewer is TokenViewer, IUniswapV2PoolInfoViewer {
     uint256[] memory tokenBalances = new uint256[](2);
     (tokenBalances[0], tokenBalances[1], ) = uniswapV2Pair.getReserves();
     uint64[] memory fees = new uint64[](1);
-    fees[0] = ConstantLib.FEE;
+    fees[0] = FEE;
     UniswapV2PoolInfo memory poolInfo = UniswapV2PoolInfo({
       totalSupply: uniswapV2Pair.totalSupply(),
       tokenBalances: tokenBalances,

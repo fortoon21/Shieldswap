@@ -5,21 +5,15 @@ import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol";
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 
 import "../interfaces/IUniswapV3PoolInfoViewer.sol";
-import "./TokenViewer.sol";
 
 /*
  * @dev: for test only
  */
 import "hardhat/console.sol";
 
-contract UniswapV3Viewer is TokenViewer, IUniswapV3PoolInfoViewer {
-  IUniswapV3Factory public uniswapV3Factory;
-
-  constructor(address factory) {
-    uniswapV3Factory = IUniswapV3Factory(factory);
-  }
-
-  function getPoolInfo(address pool) public view override returns (UniswapV3PoolInfo memory) {
+contract UniswapV3Viewer is IUniswapV3PoolInfoViewer {
+  function getPoolInfo(address factory, address pool) public view override returns (UniswapV3PoolInfo memory) {
+    IUniswapV3Factory uniswapV3Factory = IUniswapV3Factory(factory);
     IUniswapV3Pool uniswapV3Pool = IUniswapV3Pool(pool);
     address[] memory tokenList = new address[](2);
     tokenList[0] = uniswapV3Pool.token0();

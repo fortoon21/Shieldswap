@@ -17,5 +17,5 @@ interface IUniswapV3PoolInfoViewer {
     bool unlocked;
   }
 
-  function getPoolInfo(address pool) external view returns (UniswapV3PoolInfo memory);
+  function getPoolInfo(address factoryAddress, address pool) external view returns (UniswapV3PoolInfo memory);
 }
