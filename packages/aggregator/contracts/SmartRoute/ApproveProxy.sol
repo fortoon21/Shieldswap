@@ -27,8 +27,8 @@ contract ApproveProxy is InitializableOwnable {
     address public _PENDING_ADD_PROXY_;
     address public immutable _APPROVE_;
 
-    constructor(address dodoApporve) {
-        _APPROVE_ = dodoApporve;
+    constructor(address approve) {
+        _APPROVE_ = approve;
     }
 
     function init(address owner, address[] memory proxies) external {
@@ -44,13 +44,13 @@ contract ApproveProxy is InitializableOwnable {
         _PENDING_ADD_PROXY_ = address(0);
     }
 
-    function addDODOProxy() external onlyOwner {
+    function addProxy() external onlyOwner {
         _IS_ALLOWED_PROXY_[_PENDING_ADD_PROXY_] = true;
         lockAddProxy();
     }
 
-    function removeDODOProxy(address oldDodoProxy) public onlyOwner {
-        _IS_ALLOWED_PROXY_[oldDodoProxy] = false;
+    function removeProxy(address oldProxy) public onlyOwner {
+        _IS_ALLOWED_PROXY_[oldProxy] = false;
     }
 
     function claimTokens(

@@ -28,6 +28,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
     // ============ Storage ============
 
     address constant _ETH_ADDRESS_ = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+    address constant _WMATIC_ADDRESS_=0xb685400156cF3CBE8725958DeAA61436727A30c3;
     address public immutable _APPROVE_PROXY_;
 
     struct PathInfo {
@@ -111,6 +112,12 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         // Your logic goes here.
         //
 
+        for(uint256 i; i<assets.length;i++){
+          if(assets[i]==_WMATIC_ADDRESS_){
+            IWETH(_WMATIC_ADDRESS_).withdraw(amounts[i]);
+          }
+        }
+
         PathInfo[] memory pathInfos = abi.decode(params, (PathInfo[]));
         pathInfos[pathInfos.length - 1].to = address(this);
         _multiHopSingleSwap(pathInfos);
@@ -124,6 +131,9 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         // Approve the LendingPool contract allowance to *pull* the owed amount
         for (uint256 i = 0; i < assets.length; i++) {
             uint256 amountOwing = amounts[i].add(premiums[i]);
+            if(assets[i]==_WMATIC_ADDRESS_){
+              IWETH(_WMATIC_ADDRESS_).deposit{value:amountOwing}();
+            }
             IERC20(assets[i]).approve(address(LENDING_POOL), amountOwing);
         }
 
