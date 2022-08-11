@@ -19,17 +19,6 @@ contract UniswapV2Viewer is IUniswapV2PoolInfoViewer {
   */
   uint64 public constant FEE = 300;
 
-  function getPoolsLength(address factory) public view returns (uint256) {
-    IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
-    uint256 pairsLength = uniswapV2Factory.allPairsLength();
-    return pairsLength;
-  }
-
-  function getPoolAddressByIndex(address factory, uint256 index) public view returns (address) {
-    IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
-    return uniswapV2Factory.allPairs(index);
-  }
-
   function getPoolInfo(address factory, address pool) public view override returns (UniswapV2PoolInfo memory) {
     IUniswapV2Factory uniswapV2Factory = IUniswapV2Factory(factory);
     IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(pool);
