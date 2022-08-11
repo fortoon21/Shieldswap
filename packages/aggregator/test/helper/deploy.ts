@@ -4,7 +4,8 @@ import address from "../../address.json";
 import { logger } from "../../lib/logger";
 
 export const deployOrAttach = async (
-  contractName: "TokenViewer" | "UniswapV2Viewer" | "UniswapV3Viewer",
+  contractName: "TokenViewer" | "UniswapV2Viewer" | "UniswapV3Viewer" | "UniAdapter",
+
   ...args: any[]
 ) => {
   const factory = await ethers.getContractFactory(contractName);
