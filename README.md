@@ -4,7 +4,7 @@ MEV Resistant Flashloanable DEX Aggregator
 
 ## Live Demo
 
-https://2022-eths-eoul-submission.vercel.app/
+https://2022-eth-seoul-submission.vercel.app/
 
 ![the graph diagram](./packages/frontend/public/docs/demo.png)
 
