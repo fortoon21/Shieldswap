@@ -46,6 +46,7 @@
     "cross-fetch": "^3.1.5",
     "ethers-multicall": "^0.2.3",
     "graphql": "^16.5.0",
+    "hardhat-deploy": "^0.11.12",
     "react": "^18.2.0"
   }
 }
