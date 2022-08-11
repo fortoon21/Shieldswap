@@ -35,10 +35,7 @@ export const Header: React.FC = () => {
     <Box p="4" as="header">
       <Flex justify="space-between" align="center">
         <HStack>
-          <Icon as={AiOutlineFileProtect} color="purple.400" />
-          <Text fontSize="sm" fontWeight={"bold"} color="gray.800" cursor={"pointer"}>
-            {SERVICE_NAME}
-          </Text>
+          <Image src="/logo.png" alt="logo" h="10" />
         </HStack>
         <ConnectWalletWrapper>
           <HStack spacing="2">

@@ -3,7 +3,6 @@ import {
   Button,
   Divider,
   Flex,
-  Grid,
   HStack,
   Icon,
   Image,
@@ -17,10 +16,16 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { ethers } from "ethers";
 import React from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { FaCoins } from "react-icons/fa";
+import { useAccount, useSigner } from "wagmi";
 
+import { APPROVE_CONTRACT_ADDRESS, ROUTER_CONTRACT_ADDRESS } from "../../lib/app/constants";
+import { IERC20_ABI } from "../../lib/contracts/IERC20";
+import { getFromPathFinder } from "../../lib/path-finder";
+import { PathFinderOutput } from "../../type/path-finder";
 import { ConnectWalletWrapper } from "../ConnectWalletWrapper";
 import { Modal } from "../Modal";
 import { tokens } from "./data";
@@ -39,6 +44,87 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
 
   const { onClose: onToken0ModalClose, onOpen: onToken0ModalOpen, isOpen: isToken0Open } = useDisclosure();
   const { onClose: onToken1ModalClose, onOpen: onToken1ModalOpen, isOpen: isToken1Open } = useDisclosure();
+
+  const [amountIn, setAmountIn] = React.useState("0");
+  const [amountOut, setAmountOut] = React.useState("0");
+
+  const [dataFromPathFinder, setDataFromPathFinder] = React.useState<PathFinderOutput>();
+
+  const [isLoading, setIsloading] = React.useState(false);
+
+  const { data: signer } = useSigner();
+  const { address } = useAccount();
+
+  React.useEffect(() => {
+    _handleAmountInChange(amountIn);
+  }, [address]);
+
+  const _handleAmountInChange = async (amountIn: string) => {
+    setAmountIn(amountIn);
+    if (amountIn && address) {
+      const wei = ethers.utils.parseEther(amountIn);
+      //TODO: change to better handling, now this calls too much pathfinder
+      const input = {
+        options: {
+          tokenInAddr: tokens[token0Index].address,
+          tokenOutAddr: tokens[token1Index].address,
+          from: address || "",
+          amount: wei.toString(),
+          slippageBps: 100,
+          maxEdge: 4,
+          maxSplit: 20,
+        },
+      };
+      //TODO: change to better handling, now this calls too much pathfinder
+      const dataFromPathFinder = await getFromPathFinder(input);
+      setDataFromPathFinder(dataFromPathFinder);
+      const amountOut = ethers.utils.formatEther(dataFromPathFinder.expectedAmountOut);
+      setAmountOut(amountOut);
+    } else {
+      setDataFromPathFinder(undefined);
+      setAmountOut("0");
+    }
+  };
+
+  const handleAmountInChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const amountIn = e.target.value;
+    _handleAmountInChange(amountIn);
+  };
+
+  const swap = async () => {
+    if (!signer || !dataFromPathFinder) {
+      return;
+    }
+    try {
+      setIsloading(true);
+      console.log("token0", tokens[token0Index].symbol);
+      console.log("token1", tokens[token1Index].symbol);
+      const erc20Address = tokens[token0Index].address;
+      const erc20 = new ethers.Contract(erc20Address, IERC20_ABI, signer);
+      const allowance = await erc20.allowance(address, APPROVE_CONTRACT_ADDRESS);
+      console.log(allowance);
+      const wei = ethers.utils.parseEther(amountIn);
+      console.log(wei);
+      const isApproved = ethers.BigNumber.from(allowance).gte(wei);
+      console.log("isApproved", isApproved);
+      if (!isApproved) {
+        // TODO: make it controlled in button later
+        const tx = await erc20.approve(APPROVE_CONTRACT_ADDRESS, wei);
+        await tx.wait();
+      }
+      const transaction = {
+        from: address,
+        to: ROUTER_CONTRACT_ADDRESS,
+        value: "0",
+        data: dataFromPathFinder?.metamaskSwapTransaction.data,
+      };
+
+      await signer.sendTransaction(transaction);
+    } catch (e) {
+      console.error(e);
+      setIsloading(false);
+    }
+  };
 
   const SelectToken: React.FC<SelectTokenProps> = ({ target }) => {
     const selfIndex = target === "token0" ? token0Index : token1Index;
@@ -105,7 +191,7 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
           <Modal isOpen={isToken0Open} onClose={onToken0ModalClose} header="Select Paying Token">
             <SelectToken target="token0" />
           </Modal>
-          <Input w="40" h="12" fontSize={"xl"} rounded="2xl" type="number" />
+          <Input w="40" h="12" fontSize={"xl"} rounded="2xl" type="number" onChange={handleAmountInChange} />
         </Flex>
       </Stack>
       <Divider />
@@ -130,7 +216,7 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
           <Modal isOpen={isToken1Open} onClose={onToken1ModalClose} header="Select Receiving Token">
             <SelectToken target="token1" />
           </Modal>
-          <Input w="40" h="12" disabled rounded="2xl" type="number" />
+          <Input w="40" h="12" disabled rounded="2xl" type="number" value={amountOut} />
         </Flex>
       </Stack>
       <ConnectWalletWrapper>
@@ -143,6 +229,9 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
           color="white"
           backgroundColor={"purple.400"}
           _hover={{ bg: "purple.500" }}
+          onClick={swap}
+          disabled={!dataFromPathFinder || amountIn === "" || amountIn === "0" || isLoading}
+          isLoading={isLoading}
         >
           Swap
         </Button>

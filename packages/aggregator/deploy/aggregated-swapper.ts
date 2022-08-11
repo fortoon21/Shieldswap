@@ -35,20 +35,20 @@ const func: DeployFunction = async function ({ ethers, getNamedAccounts, deploym
     log: process.env.IS_LOG_ENABLED === "true",
   });
 
-  await deploy("RouteProxy", {
+  const { address: routeProxyAddress } = await deploy("RouteProxy", {
     from: deployer,
     args: [approveProxyAddress, address.aave.LendingPoolAddressesProvider],
     log: process.env.IS_LOG_ENABLED === "true",
   });
 
   const ApproveFactory = await ethers.getContractFactory("Approve");
-  const approveFactory = ApproveFactory.attach(approveAddress);
-  await approveFactory.deployed();
-  await approveFactory.init(deployer, approveProxyAddress);
+  const approve = ApproveFactory.attach(approveAddress);
+  await approve.deployed();
+  await approve.init(deployer, approveProxyAddress);
   const ApproveProxyFactory = await ethers.getContractFactory("ApproveProxy");
-  const approveProxyFactory = ApproveProxyFactory.attach(approveProxyAddress);
-  await approveProxyFactory.deployed();
-  await approveProxyFactory.init(deployer, [approveAddress]);
+  const approveProxy = ApproveProxyFactory.attach(approveProxyAddress);
+  await approveProxy.deployed();
+  await approveProxy.init(deployer, [routeProxyAddress]);
 };
 
 export default func;
