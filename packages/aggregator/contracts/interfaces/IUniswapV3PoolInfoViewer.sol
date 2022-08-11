@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.7;
+pragma solidity 0.8.15;
 
 interface IUniswapV3PoolInfoViewer {
   struct UniswapV3PoolInfo {
