@@ -5,6 +5,7 @@ import {
   Flex,
   HStack,
   Icon,
+  IconButton,
   Image,
   Input,
   Stack,
@@ -20,6 +21,7 @@ import { ethers } from "ethers";
 import React from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import { FaCoins } from "react-icons/fa";
+import { MdSwapVert } from "react-icons/md";
 import { useAccount, useSigner } from "wagmi";
 
 import { APPROVE_CONTRACT_ADDRESS, ROUTER_CONTRACT_ADDRESS } from "../../lib/app/constants";
@@ -59,9 +61,15 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
     _handleAmountInChange(amountIn);
   }, [address]);
 
+  const changeDirection = () => {
+    console.log("swap");
+    setToken0Index(token1Index);
+    setToken1Index(token0Index);
+  };
+
   const _handleAmountInChange = async (amountIn: string) => {
     setAmountIn(amountIn);
-    if (amountIn && address) {
+    if (amountIn && amountIn !== "0" && address) {
       const wei = ethers.utils.parseEther(amountIn);
       //TODO: change to better handling, now this calls too much pathfinder
       const input = {
@@ -180,7 +188,7 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
   };
 
   return (
-    <Stack spacing="6" pt="2">
+    <Stack spacing="4" pt="2">
       <Stack spacing="2">
         <Text fontSize="sm" fontWeight={"bold"} color="gray.800">
           You Pay
@@ -205,7 +213,21 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
           <Input w="40" h="12" fontSize={"xl"} rounded="2xl" type="number" onChange={handleAmountInChange} />
         </Flex>
       </Stack>
-      <Divider />
+      <Box position="relative" py="4">
+        <Divider />
+        <Flex position="absolute" w="full" top="0" justify={"center"}>
+          <IconButton
+            color="gray.800"
+            onClick={changeDirection}
+            aria-label="swap"
+            icon={<MdSwapVert size="24px" />}
+            background="white"
+            rounded="full"
+            size="sm"
+            variant={"outline"}
+          />
+        </Flex>
+      </Box>
       <Stack spacing="4">
         <Text fontSize="sm" fontWeight={"bold"} color="gray.800">
           You Receive

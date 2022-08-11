@@ -5,8 +5,10 @@ coverage.json
 typechain
 typechain-types
 
-#Hardhat files
+# Hardhat files
 cache
 artifacts
 
+# original
 output
+deployments

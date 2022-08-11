@@ -1,5 +1,3 @@
-
-
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.15;
 
@@ -15,7 +13,6 @@ import "./TokenViewer.sol";
 import "hardhat/console.sol";
 
 contract OldViewer is TokenViewer {
-
   struct UniswapV2PoolInfo {
     uint256 totalSupply;
     uint256[] tokenBalances;
