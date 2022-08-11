@@ -1,7 +1,7 @@
 export const getMulticallConfigByNetwork = (network: string) => {
   return {
-    multicallChunkLength: network === "hardhat" ? 2 : 2000,
-    chunckedMulticallConcurrency: network === "hardhat" ? 2 : 1,
-    limit: network === "hardhat" ? 8 : 0,
+    multicallChunkLength: network === "hardhat" ? 1 : 1000,
+    chunckedMulticallConcurrency: network === "hardhat" ? 1 : 1,
+    limit: network === "hardhat" ? 2 : 0,
   };
 };

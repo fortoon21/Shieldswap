@@ -2,7 +2,7 @@
 pragma solidity 0.8.15;
 
 import "@openzeppelin/contracts/interfaces/IERC20Metadata.sol";
-import "../interfaces/ITokenInfoViewer.sol";
+import "./intf/ITokenInfoViewer.sol";
 
 /*
  * @dev: for test only
