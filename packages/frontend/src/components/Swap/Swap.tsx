@@ -55,10 +55,13 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
   const { data: signer } = useSigner();
   const { address } = useAccount();
 
-  const handleAmountInChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const amountIn = e.target.value;
+  React.useEffect(() => {
+    _handleAmountInChange(amountIn);
+  }, [address]);
+
+  const _handleAmountInChange = async (amountIn: string) => {
     setAmountIn(amountIn);
-    if (amountIn) {
+    if (amountIn && address) {
       const wei = ethers.utils.parseEther(amountIn);
       //TODO: change to better handling, now this calls too much pathfinder
       const input = {
@@ -83,6 +86,11 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
     }
   };
 
+  const handleAmountInChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const amountIn = e.target.value;
+    _handleAmountInChange(amountIn);
+  };
+
   const swap = async () => {
     if (!signer || !dataFromPathFinder) {
       return;
@@ -105,10 +113,12 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         await tx.wait();
       }
       const transaction = {
+        from: address,
         to: ROUTER_CONTRACT_ADDRESS,
         value: "0",
         data: dataFromPathFinder?.metamaskSwapTransaction.data,
       };
+
       await signer.sendTransaction(transaction);
     } catch (e) {
       console.error(e);
