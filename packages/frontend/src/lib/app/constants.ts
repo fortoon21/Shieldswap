@@ -1,4 +1,4 @@
-export const SERVICE_NAME = "ShiledSwap";
+export const SERVICE_NAME = "SHIELD SWAP";
 export const SERVICE_DESCRIPTION = "MEV Resistant Flashloanable DEX Aggregator";
 export const SERVICE_BASE_URL = "https://2022-eth-seoul-submission.vercel.app";
 
