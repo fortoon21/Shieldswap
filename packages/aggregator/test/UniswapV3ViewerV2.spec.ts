@@ -1,12 +1,12 @@
 import { ethers, network } from "hardhat";
 import path from "path";
 
-import address from "../../address.json";
-import { exporter } from "../../lib/exporter";
-import { logger } from "../../lib/logger";
-import { UniswapV3ViewerLib } from "../../lib/viewer/v2";
-import { deployOrAttach } from "../helper/deploy";
-import { getMulticallConfigByNetwork } from "../helper/limit";
+import address from "../address.json";
+import { exporter } from "../lib/exporter";
+import { logger } from "../lib/logger";
+import { UniswapV3ViewerLib } from "../lib/viewer";
+import { deployOrAttach } from "./helper/deploy";
+import { getMulticallConfigByNetwork } from "./helper/limit";
 
 describe("UniswapV3Viewer", function () {
   let uniswapV3ViewerLib: UniswapV3ViewerLib;
@@ -16,8 +16,8 @@ describe("UniswapV3Viewer", function () {
 
     this.beforeAll(async function () {
       const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const tokenViewer = await deployOrAttach("v2", "TokenViewer");
-      const uniswapV3Viewer = await deployOrAttach("v2", "UniswapV3Viewer");
+      const tokenViewer = await deployOrAttach("TokenViewer");
+      const uniswapV3Viewer = await deployOrAttach("UniswapV3Viewer");
       uniswapV3ViewerLib = new UniswapV3ViewerLib(
         ethers.provider,
         address.uniswap.UniswapV3Factory,

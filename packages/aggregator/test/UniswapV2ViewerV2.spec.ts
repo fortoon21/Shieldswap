@@ -1,12 +1,12 @@
 import { ethers, network } from "hardhat";
 import path from "path";
 
-import address from "../../address.json";
-import { exporter } from "../../lib/exporter";
-import { logger } from "../../lib/logger";
-import { UniswapV2ViewerLib } from "../../lib/viewer/v2";
-import { deployOrAttach } from "../helper/deploy";
-import { getMulticallConfigByNetwork } from "../helper/limit";
+import address from "../address.json";
+import { exporter } from "../lib/exporter";
+import { logger } from "../lib/logger";
+import { UniswapV2ViewerLib } from "../lib/viewer";
+import { deployOrAttach } from "./helper/deploy";
+import { getMulticallConfigByNetwork } from "./helper/limit";
 
 describe("UniswapV2Viewer", function () {
   let uniswapV2ViewerLib: UniswapV2ViewerLib;
@@ -16,8 +16,8 @@ describe("UniswapV2Viewer", function () {
 
     this.beforeAll(async function () {
       const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const tokenViewer = await deployOrAttach("v2", "TokenViewer");
-      const uniswapV2Viewer = await deployOrAttach("v2", "UniswapV2Viewer");
+      const tokenViewer = await deployOrAttach("TokenViewer");
+      const uniswapV2Viewer = await deployOrAttach("UniswapV2Viewer");
       uniswapV2ViewerLib = new UniswapV2ViewerLib(
         ethers.provider,
         address.quickswap.UniswapV2Factory,
@@ -28,6 +28,10 @@ describe("UniswapV2Viewer", function () {
         limit
       );
       await uniswapV2ViewerLib.init();
+    });
+
+    it.only("getPools", async function () {
+      const tokenViewer = await deployOrAttach("OldViewer" as any, address.sushiswap.UniswapV2Factory);
     });
 
     it("getPools", async function () {
@@ -55,8 +59,8 @@ describe("UniswapV2Viewer", function () {
 
     this.beforeAll(async function () {
       const { multicallChunkLength, chunckedMulticallConcurrency, limit } = getMulticallConfigByNetwork(network.name);
-      const tokenViewer = await deployOrAttach("v2", "TokenViewer");
-      const uniswapV2Viewer = await deployOrAttach("v2", "UniswapV2Viewer");
+      const tokenViewer = await deployOrAttach("TokenViewer");
+      const uniswapV2Viewer = await deployOrAttach("UniswapV2Viewer");
       uniswapV2ViewerLib = new UniswapV2ViewerLib(
         ethers.provider,
         address.sushiswap.UniswapV2Factory,

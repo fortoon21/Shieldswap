@@ -1,18 +1,18 @@
 import { ethers } from "ethers";
 import { Contract, Provider } from "ethers-multicall";
 
-import IUniswapV3FactoryArtifact from "../../artifacts/@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol/IUniswapV3Factory.json";
-import TokenViewerArtifact from "../../artifacts/contracts/implements/TokenViewer.sol/TokenViewer.json";
-import UniswapV2ViewerArtifact from "../../artifacts/contracts/implements/UniswapV2Viewer.sol/UniswapV2Viewer.json";
-import UniswapV3ViewerArtifact from "../../artifacts/contracts/implements/UniswapV3Viewer.sol/UniswapV3Viewer.json";
+import IUniswapV3FactoryArtifact from "../artifacts/@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol/IUniswapV3Factory.json";
+import TokenViewerArtifact from "../artifacts/contracts/implements/TokenViewer.sol/TokenViewer.json";
+import UniswapV2ViewerArtifact from "../artifacts/contracts/implements/UniswapV2Viewer.sol/UniswapV2Viewer.json";
+import UniswapV3ViewerArtifact from "../artifacts/contracts/implements/UniswapV3Viewer.sol/UniswapV3Viewer.json";
 import {
   IUniswapV2Factory,
   IUniswapV3Factory,
   TokenViewer,
   UniswapV2Viewer,
   UniswapV3Viewer,
-} from "../../typechain-types";
-import { logger } from "../logger";
+} from "../typechain-types";
+import { logger } from "./logger";
 
 export class ViewerLib {
   provider: ethers.providers.JsonRpcProvider;
