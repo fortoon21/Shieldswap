@@ -134,6 +134,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
             if(assets[i]==_WMATIC_ADDRESS_){
               IWETH(_WMATIC_ADDRESS_).deposit{value:amountOwing}();
             }
+            
             IERC20(assets[i]).approve(address(LENDING_POOL), amountOwing);
         }
 

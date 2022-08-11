@@ -65,13 +65,23 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
       const wei = ethers.utils.parseEther(amountIn);
       //TODO: change to better handling, now this calls too much pathfinder
       const input = {
+        // options: {
+        //   tokenInAddr: tokens[token0Index].address,
+        //   tokenOutAddr: tokens[token1Index].address,
+        //   from: address || "",
+        //   amount: wei.toString(),
+        //   slippageBps: 100,
+        //   maxEdge: 4,
+        //   maxSplit: 20,
+        // },
+
         options: {
-          tokenInAddr: tokens[token0Index].address,
-          tokenOutAddr: tokens[token1Index].address,
+          tokenInAddr: "0x0000000000000000000000000000000000000000",
+          tokenOutAddr: "0x1Ba64dBC14e5F4e894ea2D97018a769Fdb15f664",
           from: address || "",
           amount: wei.toString(),
           slippageBps: 100,
-          maxEdge: 4,
+          maxEdge: 5,
           maxSplit: 20,
         },
       };
@@ -117,6 +127,7 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         to: ROUTER_CONTRACT_ADDRESS,
         value: "0",
         data: dataFromPathFinder?.metamaskSwapTransaction.data,
+        gasPrice: "3000000",
       };
 
       await signer.sendTransaction(transaction);
