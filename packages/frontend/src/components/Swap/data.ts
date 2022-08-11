@@ -1,3 +1,5 @@
+// TODO: this is not DRY code, update later
+
 export const tokens = [
   { symbol: "WMATIC", address: "0xa6fa4fb5f76172d178d61b04b0ecd319c5d1c0aa", icon: "matic.png" },
   { symbol: "WETH", address: "0xd575d4047f8c667E064a4ad433D04E25187F40BB", icon: "weth.webp" },
