@@ -14,6 +14,7 @@ import {
   UniswapV3Viewer,
 } from "../typechain-types";
 import { logger } from "./logger";
+import { clients, QUERY_POOLS_ID } from "./thegraph";
 
 export class ViewerLib {
   provider: ethers.providers.JsonRpcProvider;
@@ -214,13 +215,18 @@ export class UniswapV3ViewerLib extends ViewerLib {
   }
 
   async getPools() {
-    const blockNumber = await this.provider.getBlockNumber();
-    const filter = this.factory.filters.PoolCreated();
-    const events = await this.factory.queryFilter(filter, 0, blockNumber);
-    const result = events.map((event) => {
-      return event.args.pool;
-    });
-    return result;
+    if (process.env.IS_THE_GRAPH_ENABLED) {
+      const result = await clients.v3.query({ query: QUERY_POOLS_ID });
+      return result.data.pools.map((pool: any) => pool.id);
+    } else {
+      const blockNumber = await this.provider.getBlockNumber();
+      const filter = this.factory.filters.PoolCreated();
+      const events = await this.factory.queryFilter(filter, 0, blockNumber);
+      const result = events.map((event) => {
+        return event.args.pool;
+      });
+      return result;
+    }
   }
 
   async getPoolInfosByPools(pools: string[]) {
