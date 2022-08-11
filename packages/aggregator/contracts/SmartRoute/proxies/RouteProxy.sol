@@ -147,6 +147,10 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         bytes memory params
     ) internal {
         address receiverAddress = address(this);
+        address[] memory _assets=new address [](assets.length);
+        for(uint256 i; i<assets.length;i++){
+          _assets[i]=assets[i]==address(0)?_WMATIC_ADDRESS_: asset[i];
+        }
 
         address onBehalfOf = address(this);
         uint16 referralCode = 0;
@@ -160,7 +164,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
 
         LENDING_POOL.flashLoan(
             receiverAddress,
-            assets,
+            _assets,
             amounts,
             modes,
             onBehalfOf,
@@ -185,7 +189,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         bytes memory data
     ) internal {
         address[] memory assets = new address[](1);
-        assets[0] = _asset==address(0)?_WMATIC_ADDRESS_: _asset;
+        assets[0] = _asset;
 
         uint256[] memory amounts = new uint256[](1);
         amounts[0] = amount;
