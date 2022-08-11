@@ -1,4 +1,6 @@
 import "@nomicfoundation/hardhat-toolbox";
+import "hardhat-deploy";
+
 import { HardhatUserConfig } from "hardhat/config";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -21,9 +23,11 @@ const config: HardhatUserConfig = {
       accounts,
     },
   },
-
   mocha: {
     timeout: 100000,
+  },
+  namedAccounts: {
+    deployer: 0,
   },
 };
 

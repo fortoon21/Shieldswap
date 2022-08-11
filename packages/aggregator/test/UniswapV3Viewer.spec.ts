@@ -8,7 +8,7 @@ import { UniswapV3ViewerLib } from "../lib/viewer";
 import { deployOrAttach } from "./helper/deploy";
 import { getMulticallConfigByNetwork } from "./helper/limit";
 
-describe.only("UniswapV3Viewer", function () {
+describe("UniswapV3Viewer", function () {
   let uniswapV3ViewerLib: UniswapV3ViewerLib;
   describe("UniswapV3", function () {
     let pools: string[];
