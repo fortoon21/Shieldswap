@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { Contract, Provider } from "ethers-multicall";
 
+import IUniswapV2FactoryArtifact from "../artifacts/@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol/IUniswapV2Factory.json";
 import IUniswapV3FactoryArtifact from "../artifacts/@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol/IUniswapV3Factory.json";
 import TokenViewerArtifact from "../artifacts/contracts/Viewer/TokenViewer.sol/TokenViewer.json";
 import UniswapV2ViewerArtifact from "../artifacts/contracts/Viewer/UniswapV2Viewer.sol/UniswapV2Viewer.json";
@@ -13,6 +14,7 @@ import {
   UniswapV3Viewer,
 } from "../typechain-types";
 import { logger } from "./logger";
+import { clients, QUERY_POOLS_ID } from "./thegraph";
 
 export class ViewerLib {
   provider: ethers.providers.JsonRpcProvider;
@@ -131,20 +133,23 @@ export class UniswapV2ViewerLib extends ViewerLib {
     limit?: number
   ) {
     super(prvider, factoryAddress, tokenViewerAddress, multicallChunkLength, chunckedMulticallConcurrency, limit);
-    this.factory = new ethers.Contract(factoryAddress, UniswapV2ViewerArtifact.abi, this.provider) as IUniswapV2Factory;
+    this.factory = new ethers.Contract(
+      factoryAddress,
+      IUniswapV2FactoryArtifact.abi,
+      this.provider
+    ) as IUniswapV2Factory;
     this.poolViewer = new ethers.Contract(poolViewerAddress, UniswapV2ViewerArtifact.abi, prvider) as UniswapV2Viewer;
     this.multicallViwer = new Contract(poolViewerAddress, UniswapV2ViewerArtifact.abi);
   }
 
   async getPools() {
-    const poolLength = await this.poolViewer.getPoolsLength(this.factoryAddress);
-    const chunkedMulticall = await this.createChunkedMulticall(
-      poolLength.toNumber(),
-      this.multicallViwer.getPoolAddressByIndex,
-      true,
-      "index"
-    );
-    return await this.processChunkedMulticall(chunkedMulticall);
+    const blockNumber = await this.provider.getBlockNumber();
+    const filter = this.factory.filters.PairCreated();
+    const events = await this.factory.queryFilter(filter, 0, blockNumber);
+    const result = events.map((event) => {
+      return event.args.pair;
+    });
+    return result;
   }
 
   async getPoolInfosByPools(pools: string[]) {
@@ -210,13 +215,18 @@ export class UniswapV3ViewerLib extends ViewerLib {
   }
 
   async getPools() {
-    const blockNumber = await this.provider.getBlockNumber();
-    const filter = this.factory.filters.PoolCreated();
-    const events = await this.factory.queryFilter(filter, 0, blockNumber);
-    const result = events.map((event) => {
-      return event.args.pool;
-    });
-    return result;
+    if (process.env.IS_THE_GRAPH_ENABLED) {
+      const result = await clients.v3.query({ query: QUERY_POOLS_ID });
+      return result.data.pools.map((pool: any) => pool.id);
+    } else {
+      const blockNumber = await this.provider.getBlockNumber();
+      const filter = this.factory.filters.PoolCreated();
+      const events = await this.factory.queryFilter(filter, 0, blockNumber);
+      const result = events.map((event) => {
+        return event.args.pool;
+      });
+      return result;
+    }
   }
 
   async getPoolInfosByPools(pools: string[]) {
