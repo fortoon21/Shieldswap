@@ -185,7 +185,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         bytes memory data
     ) internal {
         address[] memory assets = new address[](1);
-        assets[0] = _asset;
+        assets[0] = _asset==address(0)?_WMATIC_ADDRESS_: _asset;
 
         uint256[] memory amounts = new uint256[](1);
         amounts[0] = amount;
