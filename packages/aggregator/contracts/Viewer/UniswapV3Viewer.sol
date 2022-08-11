@@ -4,7 +4,7 @@ pragma solidity 0.8.15;
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Factory.sol";
 import "@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol";
 
-import "../interfaces/IUniswapV3PoolInfoViewer.sol";
+import "./intf/IUniswapV3PoolInfoViewer.sol";
 
 /*
  * @dev: for test only

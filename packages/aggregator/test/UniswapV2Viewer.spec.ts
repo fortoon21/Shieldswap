@@ -30,10 +30,6 @@ describe("UniswapV2Viewer", function () {
       await uniswapV2ViewerLib.init();
     });
 
-    it.only("getPools", async function () {
-      const tokenViewer = await deployOrAttach("OldViewer" as any, address.sushiswap.UniswapV2Factory);
-    });
-
     it("getPools", async function () {
       pools = await uniswapV2ViewerLib.getPools();
       logger.log(pools);

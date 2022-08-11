@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/interfaces/IERC20Metadata.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
-import "../interfaces/IUniswapV2PoolInfoViewer.sol";
+import "./intf/IUniswapV2PoolInfoViewer.sol";
 
 /*
  * @dev: for test only

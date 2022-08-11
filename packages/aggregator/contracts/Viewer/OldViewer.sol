@@ -1,7 +1,7 @@
 
 
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.7;
+pragma solidity 0.8.15;
 
 import "@openzeppelin/contracts/interfaces/IERC20Metadata.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
