@@ -33,19 +33,19 @@ describe("UniswapV3Viewer", function () {
     it("getPools", async function () {
       pools = await uniswapV3ViewerLib.getPools();
       logger.log(pools);
-      exporter.export(path.join(__dirname, "../../output/v3/uniswap"), "pools.json", JSON.stringify(pools));
+      exporter.export(path.join(__dirname, "../output/v3/uniswap"), "pools.json", JSON.stringify(pools));
     });
 
     it("getPoolInfosByPools", async function () {
       poolInfos = await uniswapV3ViewerLib.getPoolInfosByPools(pools);
       logger.log(poolInfos);
-      exporter.export(path.join(__dirname, "../../output/v3/uniswap"), "poolInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v3/uniswap"), "poolInfos.json", JSON.stringify(poolInfos));
     });
 
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV3ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      exporter.export(path.join(__dirname, "../../output/v3/uniswap"), "tokenInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v3/uniswap"), "tokenInfos.json", JSON.stringify(poolInfos));
     });
   });
 });

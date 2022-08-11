@@ -37,19 +37,19 @@ describe("UniswapV2Viewer", function () {
     it("getPools", async function () {
       pools = await uniswapV2ViewerLib.getPools();
       logger.log(pools);
-      exporter.export(path.join(__dirname, "../../output/v2/quickswap"), "pools.json", JSON.stringify(pools));
+      exporter.export(path.join(__dirname, "../output/v2/quickswap"), "pools.json", JSON.stringify(pools));
     });
 
     it("getPoolInfosByPools", async function () {
       poolInfos = await uniswapV2ViewerLib.getPoolInfosByPools(pools);
       logger.log(poolInfos);
-      exporter.export(path.join(__dirname, "../../output/v2/quickswap"), "poolInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v2/quickswap"), "poolInfos.json", JSON.stringify(poolInfos));
     });
 
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV2ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      exporter.export(path.join(__dirname, "../../output/v2/quickswap"), "tokenInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v2/quickswap"), "tokenInfos.json", JSON.stringify(poolInfos));
     });
   });
 
@@ -76,19 +76,19 @@ describe("UniswapV2Viewer", function () {
     it("getPools", async function () {
       pools = await uniswapV2ViewerLib.getPools();
       logger.log(pools);
-      exporter.export(path.join(__dirname, "../../output/v2/sushiswap"), "pools.json", JSON.stringify(pools));
+      exporter.export(path.join(__dirname, "../output/v2/sushiswap"), "pools.json", JSON.stringify(pools));
     });
 
     it("getPoolInfosByPools", async function () {
       poolInfos = await uniswapV2ViewerLib.getPoolInfosByPools(pools);
       logger.log(poolInfos);
-      exporter.export(path.join(__dirname, "../../output/v2/sushiswap"), "poolInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v2/sushiswap"), "poolInfos.json", JSON.stringify(poolInfos));
     });
 
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV2ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      exporter.export(path.join(__dirname, "../../output/v2/sushiswap"), "tokenInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v2/sushiswap"), "tokenInfos.json", JSON.stringify(poolInfos));
     });
   });
 });
