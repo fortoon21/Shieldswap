@@ -114,6 +114,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         PathInfo[] memory pathInfos = abi.decode(params, (PathInfo[]));
         pathInfos[pathInfos.length - 1].to = address(this);
         _multiHopSingleSwap(pathInfos);
+        
 
         // At the end of your logic above, this contract owes
         // the flashloaned amounts + premiums.
@@ -603,29 +604,24 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
         address fromToken,
         uint256 amountIn,
         address toToken,
-        bytes calldata dexAgg,
-        bytes calldata flashLoans,
+        LinearWeightPathInfo memory linearWeightPathInfo,
+        FlashLoanDes[] memory flashDes,
         uint256 minReturnAmount,
         uint256 deadLine
     ) external payable checkDeadline(deadLine) returns (uint256 output) {
         require(minReturnAmount > 0, "minReturn should be larger than 0");
 
         _deposit(msg.sender, fromToken, amountIn);
-        {
-            LinearWeightPathInfo memory linearWeightPathInfo = abi.decode(
-                dexAgg,
-                (LinearWeightPathInfo)
-            );
-            require(
-                linearWeightPathInfo.amountIn == amountIn &&
-                    linearWeightPathInfo.fromToken == fromToken &&
-                    linearWeightPathInfo.toToken == toToken,
-                "not same input"
-            );
-            output = _linearSplitMultiHopMultiSwap(linearWeightPathInfo);
-        }
+        
+        require(
+            linearWeightPathInfo.amountIn == amountIn &&
+                linearWeightPathInfo.fromToken == fromToken &&
+                linearWeightPathInfo.toToken == toToken,
+            "not same input"
+        );
+        output = _linearSplitMultiHopMultiSwap(linearWeightPathInfo);
+        
 
-        FlashLoanDes[] memory flashDes = abi.decode(flashLoans, (FlashLoanDes[]));
         for (uint256 i; i < flashDes.length; i++) {
             require(
                 flashDes[i].pathInfos[0].amountIn == flashDes[i].amountIn,
