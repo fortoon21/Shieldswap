@@ -33,7 +33,7 @@ contract TokenViewer is ITokenInfoViewer {
   {
     uint8 decimals = IERC20Metadata(token).decimals();
     string memory name = IERC20Metadata(token).name();
-    string memory symbol = IERC20Metadata(token).name();
+    string memory symbol = IERC20Metadata(token).symbol();
     return (decimals, name, symbol);
   }
 }

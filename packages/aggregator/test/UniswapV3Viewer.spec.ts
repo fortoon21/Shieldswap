@@ -46,7 +46,7 @@ describe("UniswapV3Viewer", function () {
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV3ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      exporter.export(path.join(__dirname, "../output/v3/uniswap"), "tokenInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v3/uniswap"), "tokenInfos.json", JSON.stringify(tokens));
     });
   });
 });

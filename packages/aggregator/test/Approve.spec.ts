@@ -10,7 +10,7 @@ import { deployOrAttach } from "./helper/deploy";
  * @TODO add unit test for owner and proxy management
  */
 
-describe("Approve", function () {
+describe.skip("Approve", function () {
   let signer: SignerWithAddress;
   let malicious: SignerWithAddress;
   let owner: SignerWithAddress;

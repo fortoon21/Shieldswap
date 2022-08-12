@@ -2966,8 +2966,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x0396f19d325f2ff049" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x7e9457984b9cb2cd" },
-      { "type": "BigNumber", "hex": "0x1a4340e8a603d16cff" }
+      { "type": "BigNumber", "hex": "0x7ff0ccaa9d69e55c" },
+      { "type": "BigNumber", "hex": "0x19fbf204571b0b5278" }
     ],
     "pool": "0xFB2E4EfBcC86C080E2cE5251663B51cA5B150B97",
     "tokenList": ["0x5B67676a984807a212b1c59eBFc9B3568a474F0a", "0xE03489D4E90b22c59c5e23d45DFd59Fc0dB8a025"],
@@ -4006,8 +4006,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0xd215eb346c0b" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x33d0ecdc87259586" },
-      { "type": "BigNumber", "hex": "0x0356d3799b" }
+      { "type": "BigNumber", "hex": "0x33d0ff0d240ad586" },
+      { "type": "BigNumber", "hex": "0x0356d24e6d" }
     ],
     "pool": "0x1B618E7dcECDf7d1F1482bBfC541b24304258602",
     "tokenList": ["0x5B67676a984807a212b1c59eBFc9B3568a474F0a", "0xBD21A10F619BE90d6066c941b04e340841F1F989"],
@@ -4383,8 +4383,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x011639079be0989bb3" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x01854bc7b9f204ef6a9c" },
-      { "type": "BigNumber", "hex": "0xcad9621b12d721" }
+      { "type": "BigNumber", "hex": "0x018576adae17dcd62527" },
+      { "type": "BigNumber", "hex": "0xcac31b6490f26d" }
     ],
     "pool": "0x394D188bfEe26f6de29ac6b46d1638a4b9FE2cb1",
     "tokenList": ["0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F", "0x5B67676a984807a212b1c59eBFc9B3568a474F0a"],
@@ -9349,8 +9349,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x1d707294683efb7b" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0xcb04398576a9df63" },
-      { "type": "BigNumber", "hex": "0x045157fbe09616c5" }
+      { "type": "BigNumber", "hex": "0xcb33981e0bab34b7" },
+      { "type": "BigNumber", "hex": "0x04505715504821d2" }
     ],
     "pool": "0xedaF6F94E96A79C90C04d5d684d509350Fd71456",
     "tokenList": ["0x5B67676a984807a212b1c59eBFc9B3568a474F0a", "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1"],
@@ -9388,8 +9388,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x12f8eddffd91" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x9284ab" },
-      { "type": "BigNumber", "hex": "0x0276c15f5be431591f" }
+      { "type": "BigNumber", "hex": "0x8bce32" },
+      { "type": "BigNumber", "hex": "0x029522086f98b1ffb9" }
     ],
     "pool": "0xCCf0fDf01e33f9763cadCfC6C28179147193138A",
     "tokenList": ["0x3813e82e6f7098b9583FC0F33a962D02018B6803", "0x5B67676a984807a212b1c59eBFc9B3568a474F0a"],
@@ -9505,8 +9505,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x05305b58e8c1e830" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x57b35852f599105b" },
-      { "type": "BigNumber", "hex": "0x37decebb528c3107" }
+      { "type": "BigNumber", "hex": "0x843f8e51169a1059" },
+      { "type": "BigNumber", "hex": "0x2517cf821d411871" }
     ],
     "pool": "0xBc2249E1Be10bA5ee03a46d5734F6CE1854a7361",
     "tokenList": ["0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889", "0xcB1e72786A6eb3b44C2a2429e317c8a2462CFeb1"],
@@ -9882,8 +9882,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x029bdb67f7ac0e" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0xfe8402202856d0d731" },
-      { "type": "BigNumber", "hex": "0x06e88b46" }
+      { "type": "BigNumber", "hex": "0xfe591c2c027eea1ca6" },
+      { "type": "BigNumber", "hex": "0x06e9b674" }
     ],
     "pool": "0x2E99bF8f5631C2b9dF2d6681b551346021542F44",
     "tokenList": ["0x001B3B4d0F3714Ca98ba10F6042DaEbF0B1B7b6F", "0xBD21A10F619BE90d6066c941b04e340841F1F989"],
@@ -13704,8 +13704,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x06efc62d1c44f120" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x0272b9013303f1" },
-      { "type": "BigNumber", "hex": "0x0646a8b3852cb5397da3" }
+      { "type": "BigNumber", "hex": "0x0274bf6e58b1f2" },
+      { "type": "BigNumber", "hex": "0x06418010fec83db7d18b" }
     ],
     "pool": "0x48a8E74730Fc1b00fE8a6F4Ef5FA489685c3F7a2",
     "tokenList": ["0x8f7116CA03AEB48547d0E2EdD3Faa73bfB232538", "0xc8BA1fdaf17c1f16C68778fde5f78F3D37cD1509"],
@@ -13717,8 +13717,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x1953971da38c4121" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x1e71c5ee443878e9891c" },
-      { "type": "BigNumber", "hex": "0xd3dc5d59aa4b" }
+      { "type": "BigNumber", "hex": "0x1e58c594d77de5549724" },
+      { "type": "BigNumber", "hex": "0xd48b85600f2d" }
     ],
     "pool": "0xdF95317B41082eb8AFC1CE10eDfE9081CeD39caD",
     "tokenList": ["0x3dd7F3CF122e0460Dba8A75d191b3486752B6A61", "0x8f7116CA03AEB48547d0E2EdD3Faa73bfB232538"],
@@ -16057,8 +16057,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x029dabfc92c1fe1ddcef45" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0xd595d716172c47bf7fa1" },
-      { "type": "BigNumber", "hex": "0x0833bc69e9f712f1bde43b" }
+      { "type": "BigNumber", "hex": "0xd5954a58a2af14540433" },
+      { "type": "BigNumber", "hex": "0x0833c1d5b1554054cde43b" }
     ],
     "pool": "0xEec15Ce92d9A5dF931662a513AdcFad8b55a9Fad",
     "tokenList": ["0x3f81faE423a77c04D3AcD20BA9Be8b834A92eF4B", "0xea08b08E84665b369Eb4E5699751514FF9b65423"],
@@ -16070,8 +16070,8 @@
   {
     "totalSupply": { "type": "BigNumber", "hex": "0x1a290dad209ee078737f1d" },
     "tokenBalances": [
-      { "type": "BigNumber", "hex": "0x0849b2baad6e0197f65d3c" },
-      { "type": "BigNumber", "hex": "0x52931960a062f8f02f07a2" }
+      { "type": "BigNumber", "hex": "0x0849b1ed2d15e4c374b5a1" },
+      { "type": "BigNumber", "hex": "0x529321666da9e8750d076a" }
     ],
     "pool": "0x42383e708a35Ec545bbdB28a047BC3b54Cb8D099",
     "tokenList": ["0x3f81faE423a77c04D3AcD20BA9Be8b834A92eF4B", "0x5c6148B0cBD7c4BA7Be12960c2eA4d2276a9f79e"],
