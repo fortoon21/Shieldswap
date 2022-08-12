@@ -24,10 +24,19 @@ import { FaCoins } from "react-icons/fa";
 import { MdSwapVert } from "react-icons/md";
 import { useAccount, useSigner } from "wagmi";
 
-import { APPROVE_CONTRACT_ADDRESS, ROUTER_CONTRACT_ADDRESS } from "../../lib/app/constants";
-import { IERC20_ABI } from "../../lib/contracts/IERC20";
+import {
+  APPROVE_CONTRACT_ADDRESS,
+  PRC_URL,
+  QUICKSWAP_FACTORY_ADDRESS,
+  ROUTER_CONTRACT_ADDRESS,
+  UNI_ADDAPTER_ADDRESS,
+} from "../../lib/app/constants";
+import { ERC20_ABI } from "../../lib/contracts/ERC20";
+import { ROUTE_PROXY_ABI } from "../../lib/contracts/RouteProxy";
+import { UNI_ADAPTER_ABI } from "../../lib/contracts/UniAdapter";
+import { UNISWAP_V2_FACTORY_ABI } from "../../lib/contracts/UniswapV2Factory";
 import { getFromPathFinder } from "../../lib/path-finder";
-import { PathFinderOutput } from "../../type/path-finder";
+import { PathFinderInput, PathFinderOutput } from "../../type/path-finder";
 import { ConnectWalletWrapper } from "../ConnectWalletWrapper";
 import { Modal } from "../Modal";
 import { tokens } from "./data";
@@ -50,7 +59,7 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
   const [amountIn, setAmountIn] = React.useState("0");
   const [amountOut, setAmountOut] = React.useState("0");
 
-  const [dataFromPathFinder, setDataFromPathFinder] = React.useState<PathFinderOutput>();
+  const [dataFromPathFinder, setDataFromPathFinder] = React.useState<any>();
 
   const [isLoading, setIsloading] = React.useState(false);
 
@@ -67,46 +76,74 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
     setToken1Index(token0Index);
   };
 
+  const handleAmountInChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const amountIn = e.target.value;
+    _handleAmountInChange(amountIn);
+  };
+
   const _handleAmountInChange = async (amountIn: string) => {
     setAmountIn(amountIn);
-    if (amountIn && amountIn !== "0" && address) {
-      const wei = ethers.utils.parseEther(amountIn);
+    if (amountIn && amountIn !== "0" && signer && address) {
+      const tokenInAddr = tokens[token0Index].address;
+      const tokenOutAddr = tokens[token1Index].address;
+      const amount = ethers.utils.parseEther(amountIn).toString();
       //TODO: change to better handling, now this calls too much pathfinder
-      const input = {
-        // options: {
-        //   tokenInAddr: tokens[token0Index].address,
-        //   tokenOutAddr: tokens[token1Index].address,
-        //   from: address || "",
-        //   amount: wei.toString(),
-        //   slippageBps: 100,
-        //   maxEdge: 4,
-        //   maxSplit: 20,
-        // },
 
+      const input = {
         options: {
-          tokenInAddr: "0x0000000000000000000000000000000000000000",
-          tokenOutAddr: "0x1Ba64dBC14e5F4e894ea2D97018a769Fdb15f664",
-          from: address || "",
-          amount: wei.toString(),
+          tokenInAddr,
+          tokenOutAddr,
+          from: address,
+          amount,
           slippageBps: 100,
-          maxEdge: 5,
+          maxEdge: 4,
           maxSplit: 20,
         },
       };
+
       //TODO: change to better handling, now this calls too much pathfinder
-      const dataFromPathFinder = await getFromPathFinder(input);
-      setDataFromPathFinder(dataFromPathFinder);
+      //TODO: use path finder after deployment
+      // const dataFromPathFinder = await getFromPathFinder(input);
+      const dataFromPathFinder = await tempPathFinder(input);
+
+      // remove afeter implementation
+
+      setDataFromPathFinder(dataFromPathFinder as any);
       const amountOut = ethers.utils.formatEther(dataFromPathFinder.expectedAmountOut);
       setAmountOut(amountOut);
+      return;
     } else {
       setDataFromPathFinder(undefined);
       setAmountOut("0");
     }
   };
 
-  const handleAmountInChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const amountIn = e.target.value;
-    _handleAmountInChange(amountIn);
+  const tempPathFinder = async (input: PathFinderInput) => {
+    const provider = new ethers.providers.JsonRpcProvider(PRC_URL);
+    const uniAdapter = new ethers.Contract(UNI_ADDAPTER_ADDRESS, UNI_ADAPTER_ABI, provider);
+    const quickswap = new ethers.Contract(QUICKSWAP_FACTORY_ADDRESS, UNISWAP_V2_FACTORY_ABI, provider);
+
+    // TODO: update for real token
+    input.options.tokenInAddr = "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889";
+    input.options.tokenOutAddr = "0x3813e82e6f7098b9583FC0F33a962D02018B6803";
+
+    const pool = await quickswap.getPair(input.options.tokenInAddr, input.options.tokenOutAddr);
+    const expectedAmountOut = await uniAdapter.getAmountOut(
+      input.options.tokenInAddr,
+      input.options.amount,
+      input.options.tokenOutAddr,
+      pool
+    );
+
+    // address fromToken,
+    // uint256 amountIn,
+    // address toToken,
+    // LinearWeightPathInfo memory linearWeightPathInfo,
+    // FlashLoanDes[] memory flashDes,
+    // uint256 minReturnAmount,
+    // uint256 deadLine
+
+    return { expectedAmountOut, pool };
   };
 
   const swap = async () => {
@@ -117,11 +154,16 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
       setIsloading(true);
       console.log("token0", tokens[token0Index].symbol);
       console.log("token1", tokens[token1Index].symbol);
-      const erc20Address = tokens[token0Index].address;
-      const erc20 = new ethers.Contract(erc20Address, IERC20_ABI, signer);
+
+      // const tokenInAddress = tokens[token0Index].address;
+      // const tokenOutAddress = tokens[token1Index].address;
+      const tokenInAddress = "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889";
+      const tokenOutddress = "0x3813e82e6f7098b9583FC0F33a962D02018B6803";
+      const erc20Address = tokenInAddress;
+      const erc20 = new ethers.Contract(erc20Address, ERC20_ABI, signer);
       const allowance = await erc20.allowance(address, APPROVE_CONTRACT_ADDRESS);
       console.log(allowance);
-      const wei = ethers.utils.parseEther(amountIn);
+      const wei = ethers.utils.parseEther(amountIn).toString();
       console.log(wei);
       const isApproved = ethers.BigNumber.from(allowance).gte(wei);
       console.log("isApproved", isApproved);
@@ -130,15 +172,40 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         const tx = await erc20.approve(APPROVE_CONTRACT_ADDRESS, wei);
         await tx.wait();
       }
-      const transaction = {
-        from: address,
-        to: ROUTER_CONTRACT_ADDRESS,
-        value: "0",
-        data: dataFromPathFinder?.metamaskSwapTransaction.data,
-        gasPrice: "3000000",
-      };
 
-      await signer.sendTransaction(transaction);
+      const routeProxy = new ethers.Contract(ROUTER_CONTRACT_ADDRESS, ROUTE_PROXY_ABI, signer);
+
+      // struct WeightPathInfo {
+      //   address fromToken;
+      //   uint256 amountIn;
+      //   address toToken;
+      //   address to;
+      //   uint256[] weights;
+      //   address[] adapters;
+      //   address[] pools;
+      // }
+      const weightPathInfo = [
+        tokenInAddress,
+        wei,
+        tokenOutddress,
+        address,
+        [0],
+        [UNI_ADDAPTER_ADDRESS],
+        [dataFromPathFinder.pool],
+      ];
+      console.log(routeProxy);
+      console.log(tokenInAddress, tokenOutddress, wei, weightPathInfo);
+      await routeProxy.singleHopMultiSwap(tokenInAddress, wei, tokenOutddress, weightPathInfo);
+      console.log(await routeProxy.owner());
+      // const transaction = {
+      //   from: address,
+      //   to: ROUTER_CONTRACT_ADDRESS,
+      //   value: "0",
+      //   data: dataFromPathFinder?.metamaskSwapTransaction.data,
+      //   gasPrice: "3000000",
+      // };
+
+      // await signer.sendTransaction(transaction);
     } catch (e) {
       console.error(e);
       setIsloading(false);
