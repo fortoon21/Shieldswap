@@ -37,7 +37,30 @@ https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b
 
 #### Deployed Contracts
 
-TBD
+##### Route Proxy
+
+- https://mumbai.polygonscan.com/address/0xE8cb4b4b47bFF4c12a599FdB13b751C4f41974Ff#code
+- This is for handling aggregated swap
+
+##### Token Viewer
+
+- https://mumbai.polygonscan.com/address/0x1a2e1CCb2702A3c30Fb04A80918eA0d0f6C06D8A#code
+- This is for aggregating info from token in multicall
+
+##### Token Viewer
+
+- https://mumbai.polygonscan.com/address/0x4a44b451d9239e60E5A3df7214b2c467b7148902#code
+- This is for aggregating info from uniswap v2 type dex in multicall
+
+##### Token Viewer
+
+- https://mumbai.polygonscan.com/address/0x60D3e7ba1781281f04B316e79CF389460B2ddB31#code
+- This is for aggregating info from uniswap v3 type dex in multicall
+
+##### Others
+
+All contract information is kept at
+https://github.com/fortoon21/Shieldswap/blob/ed969d0a5831a18f1e0c0deca6d79b54b6c132d0/packages/aggregator/address.json
 
 #### How we use Polygon
 
