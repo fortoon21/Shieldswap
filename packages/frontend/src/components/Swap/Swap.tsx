@@ -49,6 +49,7 @@ interface SelectTokenProps {
   target: "token0" | "token1";
 }
 
+//TODO: use path finder
 export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
   const [token0Index, setToken0Index] = React.useState(0);
   const [token1Index, setToken1Index] = React.useState(1);
@@ -71,7 +72,8 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
   }, [address]);
 
   const changeDirection = () => {
-    console.log("swap");
+    setAmountIn("0");
+    setAmountOut("0");
     setToken0Index(token1Index);
     setToken1Index(token0Index);
   };
@@ -84,34 +86,38 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
   const _handleAmountInChange = async (amountIn: string) => {
     setAmountIn(amountIn);
     if (amountIn && amountIn !== "0" && signer && address) {
-      const tokenInAddr = tokens[token0Index].address;
-      const tokenOutAddr = tokens[token1Index].address;
-      const amount = ethers.utils.parseEther(amountIn).toString();
-      //TODO: change to better handling, now this calls too much pathfinder
+      try {
+        setIsloading(true);
+        const tokenInAddr = tokens[token0Index].address;
+        const tokenOutAddr = tokens[token1Index].address;
+        const amount = ethers.utils.parseEther(amountIn).toString();
+        //TODO: change to better handling, now this calls too much pathfinder
 
-      const input = {
-        options: {
-          tokenInAddr,
-          tokenOutAddr,
-          from: address,
-          amount,
-          slippageBps: 100,
-          maxEdge: 4,
-          maxSplit: 20,
-        },
-      };
+        const input = {
+          options: {
+            tokenInAddr,
+            tokenOutAddr,
+            from: address,
+            amount,
+            slippageBps: 100,
+            maxEdge: 4,
+            maxSplit: 20,
+          },
+        };
 
-      //TODO: change to better handling, now this calls too much pathfinder
-      //TODO: use path finder after deployment
-      // const dataFromPathFinder = await getFromPathFinder(input);
-      const dataFromPathFinder = await tempPathFinder(input);
+        // this is sigle path
+        const dataFromPathFinder = await tempPathFinder(input);
 
-      // remove afeter implementation
+        // this is pathfinder
+        // const dataFromPathFinder = await getFromPathFinder(input);
 
-      setDataFromPathFinder(dataFromPathFinder as any);
-      const amountOut = ethers.utils.formatEther(dataFromPathFinder.expectedAmountOut);
-      setAmountOut(amountOut);
-      return;
+        setDataFromPathFinder(dataFromPathFinder as any);
+        const amountOut = ethers.utils.formatEther(dataFromPathFinder.expectedAmountOut);
+        setAmountOut(amountOut);
+      } catch (e) {
+      } finally {
+        setIsloading(false);
+      }
     } else {
       setDataFromPathFinder(undefined);
       setAmountOut("0");
@@ -122,27 +128,15 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
     const provider = new ethers.providers.JsonRpcProvider(PRC_URL);
     const uniAdapter = new ethers.Contract(UNI_ADDAPTER_ADDRESS, UNI_ADAPTER_ABI, provider);
     const quickswap = new ethers.Contract(QUICKSWAP_FACTORY_ADDRESS, UNISWAP_V2_FACTORY_ABI, provider);
-
-    // TODO: update for real token
-    input.options.tokenInAddr = "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889";
-    input.options.tokenOutAddr = "0x3813e82e6f7098b9583FC0F33a962D02018B6803";
-
     const pool = await quickswap.getPair(input.options.tokenInAddr, input.options.tokenOutAddr);
+    console.log(input.options.tokenInAddr, input.options.tokenOutAddr);
+    console.log(pool);
     const expectedAmountOut = await uniAdapter.getAmountOut(
       input.options.tokenInAddr,
       input.options.amount,
       input.options.tokenOutAddr,
       pool
     );
-
-    // address fromToken,
-    // uint256 amountIn,
-    // address toToken,
-    // LinearWeightPathInfo memory linearWeightPathInfo,
-    // FlashLoanDes[] memory flashDes,
-    // uint256 minReturnAmount,
-    // uint256 deadLine
-
     return { expectedAmountOut, pool };
   };
 
@@ -154,11 +148,8 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
       setIsloading(true);
       console.log("token0", tokens[token0Index].symbol);
       console.log("token1", tokens[token1Index].symbol);
-
-      // const tokenInAddress = tokens[token0Index].address;
-      // const tokenOutAddress = tokens[token1Index].address;
-      const tokenInAddress = "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889";
-      const tokenOutddress = "0x3813e82e6f7098b9583FC0F33a962D02018B6803";
+      const tokenInAddress = tokens[token0Index].address;
+      const tokenOutAddress = tokens[token1Index].address;
       const erc20Address = tokenInAddress;
       const erc20 = new ethers.Contract(erc20Address, ERC20_ABI, signer);
       const allowance = await erc20.allowance(address, APPROVE_CONTRACT_ADDRESS);
@@ -173,30 +164,20 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         await tx.wait();
       }
 
-      const routeProxy = new ethers.Contract(ROUTER_CONTRACT_ADDRESS, ROUTE_PROXY_ABI, signer);
-
-      // struct WeightPathInfo {
-      //   address fromToken;
-      //   uint256 amountIn;
-      //   address toToken;
-      //   address to;
-      //   uint256[] weights;
-      //   address[] adapters;
-      //   address[] pools;
-      // }
+      // this is sigle path
       const weightPathInfo = [
         tokenInAddress,
         wei,
-        tokenOutddress,
+        tokenOutAddress,
         address,
         [0],
         [UNI_ADDAPTER_ADDRESS],
         [dataFromPathFinder.pool],
       ];
-      console.log(routeProxy);
-      console.log(tokenInAddress, tokenOutddress, wei, weightPathInfo);
-      await routeProxy.singleHopMultiSwap(tokenInAddress, wei, tokenOutddress, weightPathInfo);
-      console.log(await routeProxy.owner());
+      const routeProxy = new ethers.Contract(ROUTER_CONTRACT_ADDRESS, ROUTE_PROXY_ABI, signer);
+      await routeProxy.singleHopMultiSwap(tokenInAddress, wei, tokenOutAddress, weightPathInfo);
+
+      // this is pathfinder
       // const transaction = {
       //   from: address,
       //   to: ROUTER_CONTRACT_ADDRESS,
@@ -204,7 +185,6 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
       //   data: dataFromPathFinder?.metamaskSwapTransaction.data,
       //   gasPrice: "3000000",
       // };
-
       // await signer.sendTransaction(transaction);
     } catch (e) {
       console.error(e);
@@ -219,12 +199,25 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
     const onClose = target === "token0" ? onToken0ModalClose : onToken1ModalClose;
 
     const set = (i: number) => {
-      onSet(i);
+      if (i === oppositeIndex) {
+        setAmountIn("0");
+        setAmountOut("0");
+        setToken0Index(token1Index);
+        setToken1Index(token0Index);
+      } else {
+        onSet(i);
+      }
       onClose();
     };
 
     return (
       <Flex direction={"column"}>
+        <Text fontSize="xs" mb="4">
+          * Only limited token paira are available in Testnet
+        </Text>
+        <Text fontSize="xs" mb="4">
+          * Price may differ because of testnet low liquidity
+        </Text>
         {tokens.map((token, i) => {
           return (
             <Button
@@ -236,7 +229,7 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
               _hover={{ bg: "blue.50" }}
               justifyContent="left"
               isActive={i === selfIndex}
-              disabled={i === oppositeIndex}
+              disabled={!token.isValid}
               onClick={() => set(i)}
             >
               <Flex justify={"space-between"} w="160px">
@@ -277,7 +270,16 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
           <Modal isOpen={isToken0Open} onClose={onToken0ModalClose} header="Select Paying Token">
             <SelectToken target="token0" />
           </Modal>
-          <Input w="40" h="12" fontSize={"xl"} rounded="2xl" type="number" onChange={handleAmountInChange} />
+          <Input
+            w="40"
+            h="12"
+            fontSize={"xl"}
+            rounded="2xl"
+            min={0.1}
+            type="number"
+            onChange={handleAmountInChange}
+            value={amountIn}
+          />
         </Flex>
       </Stack>
       <Box position="relative" py="4">
