@@ -8,6 +8,7 @@ import {
   IconButton,
   Image,
   Input,
+  Link,
   Stack,
   Tab,
   TabList,
@@ -217,6 +218,16 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         </Text>
         <Text fontSize="xs" mb="4">
           * Price may differ because of testnet low liquidity
+        </Text>
+        <Text fontSize="xs" mb="4" color={"blue"}>
+          *{" "}
+          <Link
+            color={"blue"}
+            target="_blank"
+            href="https://mumbai.polygonscan.com/address/0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889#code"
+          >
+            Get WMATIC for demo
+          </Link>
         </Text>
         {tokens.map((token, i) => {
           return (
