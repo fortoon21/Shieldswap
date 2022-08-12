@@ -457,7 +457,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
     uint256 amountIn,
     address toToken,
     PathInfo[] calldata pathInfos
-  ) public returns (uint256[] memory outputs) {
+  ) public payable returns (uint256[] memory outputs) {
     _deposit(msg.sender, fromToken, amountIn);
     require(
       pathInfos[0].fromToken == fromToken &&
@@ -473,7 +473,7 @@ contract RouteProxy is FlashLoanReceiverBaseV2, Withdrawable {
     uint256 amountIn,
     address toToken,
     WeightPathInfo calldata weightPathInfo
-  ) public returns (uint256 output) {
+  ) public payable returns (uint256 output) {
     _deposit(msg.sender, fromToken, amountIn);
     require(
       weightPathInfo.fromToken == fromToken && weightPathInfo.amountIn == amountIn && weightPathInfo.toToken == toToken,
