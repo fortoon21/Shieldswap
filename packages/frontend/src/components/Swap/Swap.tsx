@@ -128,13 +128,24 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
     const provider = new ethers.providers.JsonRpcProvider(PRC_URL);
     const uniAdapter = new ethers.Contract(UNI_ADDAPTER_ADDRESS, UNI_ADAPTER_ABI, provider);
     const quickswap = new ethers.Contract(QUICKSWAP_FACTORY_ADDRESS, UNISWAP_V2_FACTORY_ABI, provider);
-    const pool = await quickswap.getPair(input.options.tokenInAddr, input.options.tokenOutAddr);
+    const pool = await quickswap.getPair(
+      input.options.tokenInAddr === "0x0000000000000000000000000000000000000000"
+        ? "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"
+        : input.options.tokenInAddr,
+      input.options.tokenOutAddr === "0x0000000000000000000000000000000000000000"
+        ? "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"
+        : input.options.tokenOutAddr
+    );
     console.log(input.options.tokenInAddr, input.options.tokenOutAddr);
     console.log(pool);
     const expectedAmountOut = await uniAdapter.getAmountOut(
-      input.options.tokenInAddr,
+      input.options.tokenInAddr === "0x0000000000000000000000000000000000000000"
+        ? "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"
+        : input.options.tokenInAddr,
       input.options.amount,
-      input.options.tokenOutAddr,
+      input.options.tokenOutAddr === "0x0000000000000000000000000000000000000000"
+        ? "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889"
+        : input.options.tokenOutAddr,
       pool
     );
     return { expectedAmountOut, pool };
@@ -151,19 +162,20 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
       const tokenInAddress = tokens[token0Index].address;
       const tokenOutAddress = tokens[token1Index].address;
       const erc20Address = tokenInAddress;
-      const erc20 = new ethers.Contract(erc20Address, ERC20_ABI, signer);
-      const allowance = await erc20.allowance(address, APPROVE_CONTRACT_ADDRESS);
-      console.log(allowance);
       const wei = ethers.utils.parseEther(amountIn).toString();
       console.log(wei);
-      const isApproved = ethers.BigNumber.from(allowance).gte(wei);
-      console.log("isApproved", isApproved);
-      if (!isApproved) {
-        // TODO: make it controlled in button later
-        const tx = await erc20.approve(APPROVE_CONTRACT_ADDRESS, wei);
-        await tx.wait();
+      if (erc20Address !== "0x0000000000000000000000000000000000000000") {
+        const erc20 = new ethers.Contract(erc20Address, ERC20_ABI, signer);
+        const allowance = await erc20.allowance(address, APPROVE_CONTRACT_ADDRESS);
+        console.log(allowance);
+        const isApproved = ethers.BigNumber.from(allowance).gte(wei);
+        console.log("isApproved", isApproved);
+        if (!isApproved) {
+          // TODO: make it controlled in button later
+          const tx = await erc20.approve(APPROVE_CONTRACT_ADDRESS, wei);
+          await tx.wait();
+        }
       }
-
       // this is sigle path
       const weightPathInfo = [
         tokenInAddress,
@@ -175,8 +187,10 @@ export const InnerSwap: React.FC<InnerSwapProps> = ({ mode }) => {
         [dataFromPathFinder.pool],
       ];
       const routeProxy = new ethers.Contract(ROUTER_CONTRACT_ADDRESS, ROUTE_PROXY_ABI, signer);
-      await routeProxy.singleHopMultiSwap(tokenInAddress, wei, tokenOutAddress, weightPathInfo);
-
+      // await routeProxy.singleHopMultiSwap(tokenInAddress, wei, tokenOutAddress, weightPathInfo, {
+      //   value: tokenInAddress === "0x0000000000000000000000000000000000000000" ? wei : "0",
+      // });
+      await routeProxy.singleHopMultiSwap(tokenInAddress, wei, tokenOutAddress, weightPathInfo, { from: address });
       // this is pathfinder
       // const transaction = {
       //   from: address,
