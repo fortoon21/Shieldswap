@@ -376,13 +376,13 @@ export const Swap: React.FC = () => {
           </TabPanels>
         </Tabs>
       </Box>
-      <HStack boxShadow={"base"} borderRadius="2xl" p="6" spacing="4" backgroundColor={"white"}>
+      <HStack boxShadow={"base"} borderRadius="2xl" p="6" spacing="4" backgroundColor={"white"} opacity={"50%"}>
         <Flex backgroundColor={"purple.100"} w="10" h="10" justify={"center"} align="center" rounded="full">
           <Icon as={FaCoins} color="purple.400" />
         </Flex>
         <HStack color="gray.800">
           <Text as="span" fontWeight={"bold"} fontSize="md">
-            569.96$
+            * $
           </Text>
           <Text as="span" color={"gray.600"} fontSize="xs">
             in savings conpared to
