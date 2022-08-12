@@ -6,7 +6,7 @@ import { Approve, ApproveProxy, MockERC20 } from "../typechain-types";
 import { NetworkName } from "../types/network";
 import { deployOrAttach } from "./helper/deploy";
 
-describe("ApproveProxy", function () {
+describe.skip("ApproveProxy", function () {
   let signer: SignerWithAddress;
   let malicious: SignerWithAddress;
   let owner: SignerWithAddress;

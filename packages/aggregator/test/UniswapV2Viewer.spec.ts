@@ -46,7 +46,7 @@ describe("UniswapV2Viewer", function () {
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV2ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      exporter.export(path.join(__dirname, "../output/v2/quickswap"), "tokenInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v2/quickswap"), "tokenInfos.json", JSON.stringify(tokens));
     });
   });
 
@@ -85,7 +85,7 @@ describe("UniswapV2Viewer", function () {
     it("getTokensByPoolInfos", async function () {
       const tokens = await uniswapV2ViewerLib.getTokensByPoolInfos(poolInfos);
       logger.log(tokens);
-      exporter.export(path.join(__dirname, "../output/v2/sushiswap"), "tokenInfos.json", JSON.stringify(poolInfos));
+      exporter.export(path.join(__dirname, "../output/v2/sushiswap"), "tokenInfos.json", JSON.stringify(tokens));
     });
   });
 });
