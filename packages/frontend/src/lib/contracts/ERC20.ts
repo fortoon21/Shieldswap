@@ -1,4 +1,4 @@
-export const IERC20_ABI = [
+export const ERC20_ABI = [
   {
     anonymous: false,
     inputs: [
