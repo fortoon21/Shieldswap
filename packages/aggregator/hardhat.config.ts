@@ -31,6 +31,11 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: 0,
   },
+  etherscan: {
+    apiKey: {
+      polygonMumbai: process.env.POLYGON_SCAN_API || "",
+    },
+  },
 };
 
 export default config;
