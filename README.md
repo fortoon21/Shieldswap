@@ -10,6 +10,17 @@ https://2022-eth-seoul-submission.vercel.app/
 
 ## Technical Integration
 
+### Pool info aggregator for pathfinder
+
+#### code
+
+- https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b4f18/packages/aggregator/lib/viewer.ts
+- this can fetch all pool info in 2-5 seconds by multicall
+
+#### generated example
+
+https://github.com/fortoon21/Shieldswap/blob/c335665a3f99eb632d48bf190a028daea13b4f18/packages/aggregator/data/v2/quickswap/poolInfos.json
+
 ### The graph
 
 #### Diagram
