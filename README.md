@@ -42,6 +42,10 @@ https://github.com/fortoon21/JK_bridge/blob/c335665a3f99eb632d48bf190a028daea13b
 - https://mumbai.polygonscan.com/address/0xE8cb4b4b47bFF4c12a599FdB13b751C4f41974Ff#code
 - This is for handling aggregated swap
 
+###### Success tx
+
+https://mumbai.polygonscan.com/tx/0x48754e8114f4a19e784910e732c0550944a30cb6a2e0d0dd6509becccdd998a5
+
 ##### Token Viewer
 
 - https://mumbai.polygonscan.com/address/0x1a2e1CCb2702A3c30Fb04A80918eA0d0f6C06D8A#code
